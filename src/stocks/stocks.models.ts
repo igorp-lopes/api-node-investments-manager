@@ -1,19 +1,27 @@
 import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Stocks } from '@prisma/client';
+import { Type } from 'class-transformer';
 
 export class RegisterStockDto {
   @IsString()
-  stock: string;
+  readonly stock: string;
 
+  @Type(() => Date)
   @IsDate()
-  day: Date;
+  readonly day: Date;
 
   @IsNumber()
   @IsOptional()
-  contribution: number;
+  readonly contribution: number;
 
   @IsNumber()
-  quotas: number;
+  readonly quotas: number;
 
   @IsNumber()
-  current_quota_value: number;
+  readonly current_quota_value: number;
 }
+
+export type StocksRegisterInfoDto = Omit<
+  Stocks,
+  'id' | 'createdAt' | 'updatedAt'
+>;
