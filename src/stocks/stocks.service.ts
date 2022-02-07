@@ -20,7 +20,7 @@ export class StocksService {
   private static createStockRecord(
     data: RegisterStockDto,
   ): Prisma.StocksCreateInput {
-    const { stock, day, contribution, quotas } = data;
+    const { stock, day, contribution, quotas, category } = data;
     const currentQuotaValue = data.current_quota_value;
 
     const meanQuotaValue = currentQuotaValue;
@@ -40,24 +40,9 @@ export class StocksService {
       investedValue: quotas * meanQuotaValue,
       variation,
       variationPercent,
+      category: category ?? 'stocks',
       createdAt: currentDate.toISOString(),
       updatedAt: currentDate.toISOString(),
     };
-
-    // export type Stocks = {
-    //   id: number
-    //   stock: string
-    //   day: Date
-    //   investedValue: number
-    //   currentValue: number
-    //   contribution: number
-    //   quotas: number
-    //   currentQuotaValue: number
-    //   meanQuotaValue: number
-    //   variation: number
-    //   variationPercent: number
-    //   createdAt: Date
-    //   updatedAt: Date
-    // }
   }
 }

@@ -19,6 +19,10 @@ export class RegisterStockDto {
 
   @IsNumber()
   readonly current_quota_value: number;
+
+  @IsString()
+  @IsOptional()
+  readonly category: string;
 }
 
 export type StocksRegisterInfoDto = Omit<
