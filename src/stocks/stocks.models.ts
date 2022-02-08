@@ -25,6 +25,15 @@ export class RegisterStockDto {
   readonly category: string;
 }
 
+export class DeleteStockRecordsDto {
+  @IsString()
+  readonly stock: string;
+
+  @Type(() => Date)
+  @IsDate()
+  readonly dates: string[];
+}
+
 export type StocksRegisterInfoDto = Omit<
   Stocks,
   'id' | 'createdAt' | 'updatedAt'
