@@ -25,13 +25,16 @@ export class RegisterStockDto {
   readonly category: string;
 }
 
-export class DeleteStockRecordsDto {
-  @IsString()
-  readonly stock: string;
+export class DeleteStockRecordsQueryDto {
+  @Type(() => Date)
+  @IsDate()
+  @IsOptional()
+  readonly start_date: Date;
 
   @Type(() => Date)
   @IsDate()
-  readonly dates: string[];
+  @IsOptional()
+  readonly end_date: Date;
 }
 
 export type StocksRegisterInfoDto = Omit<

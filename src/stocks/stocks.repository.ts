@@ -9,4 +9,13 @@ export class StocksRepository {
   public async saveStock(data: Prisma.StocksCreateInput): Promise<Stocks> {
     return this.prisma.stocks.create({ data });
   }
+
+  public async deleteStockRecordByDate(
+    stockName: string,
+    date: Date,
+  ): Promise<any> {
+    return this.prisma.stocks.deleteMany({
+      where: { stock: stockName, day: date },
+    });
+  }
 }

@@ -17,15 +17,27 @@ export class StocksService {
     return createdStock as StocksRegisterInfoDto;
   }
 
+  public async deleteStockRecords(
+    stockName: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<void> {
+    if (!endDate) {
+      await this.stocksRepository.deleteStockRecordByDate(stockName, startDate);
+    }
+  }
+
   private static createStockRecord(
     data: RegisterStockDto,
   ): Prisma.StocksCreateInput {
-    const { stock, day, contribution, quotas, category } = data;
+    const { stock, day, contribution, quotas } = data;
     const currentQuotaValue = data.current_quota_value;
 
     const meanQuotaValue = currentQuotaValue;
     const variation = 0;
     const variationPercent = 0;
+
+    const category = data.category ?? 'stocks';
 
     const currentDate = new Date(Date.now());
 
@@ -40,7 +52,7 @@ export class StocksService {
       investedValue: quotas * meanQuotaValue,
       variation,
       variationPercent,
-      category: category ?? 'stocks',
+      category,
       createdAt: currentDate.toISOString(),
       updatedAt: currentDate.toISOString(),
     };
