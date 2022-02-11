@@ -21,9 +21,18 @@ export class StocksService {
     stockName: string,
     startDate: Date,
     endDate: Date,
-  ): Promise<void> {
+  ): Promise<any> {
     if (!endDate) {
-      await this.stocksRepository.deleteStockRecordByDate(stockName, startDate);
+      return this.stocksRepository.deleteStockRecordByDate(
+        stockName,
+        startDate,
+      );
+    } else {
+      return this.stocksRepository.deleteStockRecordsByDateInterval(
+        stockName,
+        startDate,
+        endDate,
+      );
     }
   }
 

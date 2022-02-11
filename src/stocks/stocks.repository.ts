@@ -18,4 +18,14 @@ export class StocksRepository {
       where: { stock: stockName, day: date },
     });
   }
+
+  public async deleteStockRecordsByDateInterval(
+    stockName: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<any> {
+    return this.prisma.stocks.deleteMany({
+      where: { stock: stockName, day: { gte: startDate, lte: endDate } },
+    });
+  }
 }

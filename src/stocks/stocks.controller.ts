@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  HttpCode,
-  Param,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Query } from '@nestjs/common';
 import { StocksService } from './stocks.service';
 import {
   DeleteStockRecordsQueryDto,
@@ -26,16 +18,15 @@ export class StocksController {
   }
 
   @Delete('/:stock_name')
-  @HttpCode(204)
   async deleteStockRecord(
     @Param() params,
     @Query() query: DeleteStockRecordsQueryDto,
-  ): Promise<void> {
+  ): Promise<any> {
     const stockName = params.stock_name;
     const startDate = query.start_date;
     const endDate = query.end_date;
 
-    return this.stocksService.deleteStockRecords(
+    return await this.stocksService.deleteStockRecords(
       stockName.toUpperCase(),
       startDate,
       endDate,
