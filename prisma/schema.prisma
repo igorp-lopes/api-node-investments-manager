@@ -13,7 +13,7 @@ datasource db {
 model Stocks {
   id    Int     @default(autoincrement()) @id
   stock String
-  day  DateTime
+  day  DateTime @db.Date
   investedValue Float
   currentValue Float
   contribution Float
