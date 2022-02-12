@@ -28,4 +28,18 @@ export class StocksRepository {
       where: { stock: stockName, day: { gte: startDate, lte: endDate } },
     });
   }
+
+  public async getPreviousStockRecordsFromDate(
+    stockName: string,
+    date: Date,
+  ): Promise<any> {
+    return this.prisma.stocks.findFirst({
+      where: {
+        day: { lte: date },
+      },
+      orderBy: {
+        day: 'desc',
+      },
+    });
+  }
 }
