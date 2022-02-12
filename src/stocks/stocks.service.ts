@@ -10,7 +10,7 @@ export class StocksService {
   public async addStockRecord(
     data: RegisterStockDto,
   ): Promise<StocksRegisterInfoDto> {
-    const stockInfo = StocksService.createStockRecord(data);
+    const stockInfo = await this.createStockRecord(data);
 
     const createdStock = await this.stocksRepository.saveStock(stockInfo);
 
@@ -36,19 +36,23 @@ export class StocksService {
     }
   }
 
-  private static createStockRecord(
+  private async createStockRecord(
     data: RegisterStockDto,
-  ): Prisma.StocksCreateInput {
-    const { stock, day, contribution, quotas } = data;
+  ): Promise<Prisma.StocksCreateInput> {
+    const { stock, day, quotas } = data;
     const currentQuotaValue = data.current_quota_value;
 
     const meanQuotaValue = currentQuotaValue;
     const variation = 0;
     const variationPercent = 0;
+    const contribution = data.contribution ?? 0;
 
     const category = data.category ?? 'stocks';
 
     const currentDate = new Date(Date.now());
+
+    const mostRecentPreviousRecord =
+      await this.stocksRepository.getPreviousStockRecordsFromDate(stock, day);
 
     return {
       stock,
@@ -65,5 +69,17 @@ export class StocksService {
       createdAt: currentDate.toISOString(),
       updatedAt: currentDate.toISOString(),
     };
+  }
+
+  private static updateMeanQuotaValue(
+    previousMeanQuota: number,
+    currentQuotaValue: number,
+    previousQuotas: number,
+    currentQuotas: number,
+  ) {
+    return (
+      (previousMeanQuota * previousQuotas + currentQuotaValue * currentQuotas) /
+      (previousQuotas + currentQuotas)
+    );
   }
 }
