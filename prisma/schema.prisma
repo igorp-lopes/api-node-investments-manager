@@ -20,6 +20,8 @@ model Stocks {
   quotas Int
   currentQuotaValue Float
   meanQuotaValue  Float
+  dailyVariation Float
+  dailyVariationPercent Float
   variation Float
   variationPercent Float
   category String

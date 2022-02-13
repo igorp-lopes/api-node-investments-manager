@@ -39,6 +39,8 @@ export class StocksService {
     const { stock, day, quotas } = data;
     const currentQuotaValue = data.current_quota_value;
     let meanQuotaValue: number;
+    let dailyVariation: number;
+    let dailyVariationPercent: number;
     let variation: number;
     let variationPercent: number;
     let contribution = 0;
@@ -48,6 +50,8 @@ export class StocksService {
 
     if (!mostRecentPreviousRecord) {
       meanQuotaValue = currentQuotaValue;
+      dailyVariation = 0;
+      dailyVariationPercent = 0;
       variation = 0;
       variationPercent = 0;
       contribution = data.contribution ?? quotas * currentQuotaValue;
@@ -63,18 +67,21 @@ export class StocksService {
         contribution =
           (quotas - mostRecentPreviousRecord.quotas) * currentQuotaValue;
       }
-      variation =
+      dailyVariation =
         quotas * currentQuotaValue -
         mostRecentPreviousRecord.currentValue -
         contribution;
-      variationPercent = variation / mostRecentPreviousRecord.currentValue;
+      dailyVariationPercent =
+        dailyVariation / mostRecentPreviousRecord.currentValue;
+      variation = quotas * currentQuotaValue - quotas * meanQuotaValue;
+      variationPercent = variation / (quotas * meanQuotaValue);
     }
 
     const category = data.category ?? 'stocks';
     const currentTime = new Date(Date.now());
 
     return {
-      stock: stock,
+      stock: stock.toUpperCase(),
       day: day,
       contribution: contribution,
       quotas: quotas,
@@ -82,6 +89,8 @@ export class StocksService {
       currentValue: quotas * currentQuotaValue,
       meanQuotaValue: meanQuotaValue,
       investedValue: quotas * meanQuotaValue,
+      dailyVariation: dailyVariation,
+      dailyVariationPercent: dailyVariationPercent,
       variation: variation,
       variationPercent: variationPercent,
       category: category,
