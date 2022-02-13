@@ -35,6 +35,7 @@ export class StocksRepository {
   ): Promise<any> {
     return this.prisma.stocks.findFirst({
       where: {
+        stock: stockName,
         day: { lte: date },
       },
       orderBy: {
