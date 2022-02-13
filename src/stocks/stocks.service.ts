@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { StocksRepository } from './stocks.repository';
 import { RegisterStockDto, StocksRegisterInfoDto } from './stocks.models';
+import { Stocks } from '@prisma/client';
 
 @Injectable()
 export class StocksService {
@@ -13,7 +14,7 @@ export class StocksService {
 
     const createdStock = await this.stocksRepository.saveStock(stockRecordData);
 
-    return createdStock as StocksRegisterInfoDto;
+    return StocksService.formatStockRecordDataResponse(createdStock);
   }
 
   public async deleteStockRecords(
@@ -109,5 +110,25 @@ export class StocksService {
       (previousMeanQuota * previousQuotas + currentQuotaValue * currentQuotas) /
       (previousQuotas + currentQuotas)
     );
+  }
+
+  private static formatStockRecordDataResponse(
+    data: Stocks,
+  ): StocksRegisterInfoDto {
+    return {
+      stock: data.stock,
+      category: data.category,
+      day: data.day.toISOString().split('T')[0],
+      quotas: data.quotas,
+      current_quota_value: data.currentQuotaValue,
+      mean_quota_value: data.meanQuotaValue,
+      contribution: data.contribution,
+      current_value: data.currentQuotaValue,
+      invested_value: data.meanQuotaValue,
+      daily_variation: data.dailyVariation,
+      daily_variation_percent: data.dailyVariationPercent,
+      variation: data.variation,
+      variation_percent: data.variationPercent,
+    };
   }
 }

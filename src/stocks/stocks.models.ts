@@ -1,5 +1,4 @@
 import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
-import { Stocks } from '@prisma/client';
 import { Type } from 'class-transformer';
 
 export class RegisterStockDto {
@@ -37,7 +36,18 @@ export class DeleteStockRecordsQueryDto {
   readonly end_date: Date;
 }
 
-export type StocksRegisterInfoDto = Omit<
-  Stocks,
-  'id' | 'createdAt' | 'updatedAt'
->;
+export interface StocksRegisterInfoDto {
+  stock: string;
+  day: string;
+  contribution: number;
+  quotas: number;
+  current_quota_value: number;
+  current_value: number;
+  mean_quota_value: number;
+  invested_value: number;
+  daily_variation: number;
+  daily_variation_percent: number;
+  variation: number;
+  variation_percent: number;
+  category: string;
+}
