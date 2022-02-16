@@ -100,6 +100,18 @@ export class StocksService {
     };
   }
 
+  private async validateIfRecordExists(
+    stock: string,
+    day: Date,
+  ): Promise<boolean> {
+    const record = await this.stocksRepository.getPreviousStockRecordsFromDate(
+      stock,
+      day,
+    );
+
+    return !!record;
+  }
+
   private static updateMeanQuotaValue(
     previousMeanQuota: number,
     previousQuotas: number,
