@@ -1,4 +1,10 @@
-import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class RegisterStockDto {
@@ -14,9 +20,11 @@ export class RegisterStockDto {
   readonly contribution: number;
 
   @IsNumber()
+  @IsPositive()
   readonly quotas: number;
 
   @IsNumber()
+  @IsPositive()
   readonly current_quota_value: number;
 
   @IsString()
@@ -27,7 +35,6 @@ export class RegisterStockDto {
 export class DeleteStockRecordsQueryDto {
   @Type(() => Date)
   @IsDate()
-  @IsOptional()
   readonly start_date: Date;
 
   @Type(() => Date)
