@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { StocksRepository } from './stocks.repository';
 import { RegisterStockDto, StocksRegisterInfoDto } from './stocks.models';
 import { Stocks } from '@prisma/client';
+import { ErrorsService } from 'src/core/errors/errors.service';
+import { StocksErrors } from './stocks.errors';
 
 @Injectable()
 export class StocksService {
@@ -10,6 +12,11 @@ export class StocksService {
   public async addStockRecord(
     data: RegisterStockDto,
   ): Promise<StocksRegisterInfoDto> {
+    ErrorsService.validateCondition(
+      !(await this.validateIfRecordExists(data.stock, data.day)),
+      StocksErrors.EST001,
+    );
+
     const stockRecordData = await this.determineStockRecordData(data);
 
     const createdStock = await this.stocksRepository.saveStock(stockRecordData);
