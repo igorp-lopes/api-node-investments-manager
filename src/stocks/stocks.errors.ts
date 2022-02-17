@@ -6,6 +6,6 @@ export class StocksErrors {
     type: 'Bad Request',
     status: HttpStatus.BAD_REQUEST,
     name: 'EST001',
-    message: 'Stock record already exists',
+    description: 'Stock record already exists',
   };
 }

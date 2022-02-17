@@ -4,5 +4,5 @@ export interface IdentifiedError {
   type: string;
   status: HttpStatus;
   name: string;
-  message: string;
+  description: string;
 }

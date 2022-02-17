@@ -10,7 +10,7 @@ export class ErrorsService {
           name: error.name,
           type: error.type,
           status: error.status,
-          message: error.message,
+          description: error.description,
         },
         error.status,
       );
