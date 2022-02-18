@@ -8,9 +8,9 @@ export class ErrorsService {
       throw new HttpException(
         {
           name: error.name,
-          type: error.type,
+          error: error.type,
           status: error.status,
-          description: error.description,
+          message: error.message,
         },
         error.status,
       );
