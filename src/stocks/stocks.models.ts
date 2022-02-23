@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class RegisterStockDto {
+export class RegisterStockRequestDto {
   @IsString()
   readonly stock: string;
 
@@ -43,7 +43,7 @@ export class DeleteStockRecordsQueryDto {
   readonly end_date: Date;
 }
 
-export interface StocksRegisterInfoDto {
+export interface StocksRegisterResponseDto {
   stock: string;
   day: string;
   contribution: number;

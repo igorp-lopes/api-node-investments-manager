@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { StocksRepository } from './stocks.repository';
-import { RegisterStockDto, StocksRegisterInfoDto } from './stocks.models';
+import {
+  RegisterStockRequestDto,
+  StocksRegisterResponseDto,
+} from './stocks.models';
 import { Stocks } from '@prisma/client';
 import { ErrorsService } from 'src/core/errors/errors.service';
 import { StocksErrors } from './stocks.errors';
@@ -10,8 +13,8 @@ export class StocksService {
   constructor(private stocksRepository: StocksRepository) {}
 
   public async addStockRecord(
-    data: RegisterStockDto,
-  ): Promise<StocksRegisterInfoDto> {
+    data: RegisterStockRequestDto,
+  ): Promise<StocksRegisterResponseDto> {
     ErrorsService.validateCondition(
       !(await this.validateIfRecordExists(data.stock, data.day)),
       StocksErrors.EST001,
@@ -43,7 +46,7 @@ export class StocksService {
     }
   }
 
-  private async determineStockRecordData(data: RegisterStockDto) {
+  private async determineStockRecordData(data: RegisterStockRequestDto) {
     const { stock, day, quotas } = data;
     const currentQuotaValue = data.current_quota_value;
     let meanQuotaValue: number;
@@ -133,7 +136,7 @@ export class StocksService {
 
   private static formatStockRecordDataResponse(
     data: Stocks,
-  ): StocksRegisterInfoDto {
+  ): StocksRegisterResponseDto {
     return {
       stock: data.stock,
       category: data.category,
