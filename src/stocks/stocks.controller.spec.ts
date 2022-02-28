@@ -1,12 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { StocksController } from './stocks.controller';
+import { StocksService } from './stocks.service';
+import { StocksRepository } from './stocks.repository';
+import { PrismaService } from '../core/prisma.service';
 
-describe('StocksController', () => {
+describe('Stocks Controller Unit Tests', () => {
   let controller: StocksController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [StocksController],
+      providers: [StocksService, StocksRepository, PrismaService],
     }).compile();
 
     controller = module.get<StocksController>(StocksController);

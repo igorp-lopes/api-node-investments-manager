@@ -5,7 +5,7 @@ import {
   StocksRegisterResponseDto,
 } from './stocks.models';
 import { Stocks } from '@prisma/client';
-import { ErrorsService } from 'src/core/errors/errors.service';
+import { ErrorsService } from '../core/errors/errors.service';
 import { StocksErrors } from './stocks.errors';
 
 @Injectable()
