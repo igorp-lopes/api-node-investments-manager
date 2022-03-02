@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../core/prisma.service';
 import { StocksRepository } from './stocks.repository';
-import { testStockRecord1 } from '../../test/mocks/stocks/stockRecordMocks';
+import { testStockRecord1 } from '../../test/mocks/stockMocks';
 
 describe('Stocks Repository Unit Tests', () => {
   let repository: StocksRepository;
@@ -21,7 +21,7 @@ describe('Stocks Repository Unit Tests', () => {
   });
 
   describe('saveStock', () => {
-    it('should save a stock record', () => {
+    it('should save a stock record', async () => {
       prisma.stocks.create = jest.fn().mockReturnValueOnce(testStockRecord1);
 
       const repResponse = repository.saveStock({
@@ -40,12 +40,12 @@ describe('Stocks Repository Unit Tests', () => {
         variationPercent: 0,
       });
 
-      expect(repResponse).resolves.toEqual(testStockRecord1);
+      await expect(repResponse).resolves.toEqual(testStockRecord1);
     });
   });
 
   describe('getPreviousStockRecordsFromDate', () => {
-    it('should return a record if it exist', () => {
+    it('should return a record if it exist', async () => {
       prisma.stocks.findFirst = jest.fn().mockReturnValueOnce(testStockRecord1);
 
       const stockName = 'testStock1';
@@ -56,10 +56,10 @@ describe('Stocks Repository Unit Tests', () => {
         date,
       );
 
-      expect(repResponse).resolves.toEqual(testStockRecord1);
+      await expect(repResponse).resolves.toEqual(testStockRecord1);
     });
 
-    it('should return no record if none exist', () => {
+    it('should return no record if none exist', async () => {
       prisma.stocks.findFirst = jest.fn().mockReturnValueOnce(null);
 
       const stockName = 'nothing';
@@ -70,34 +70,34 @@ describe('Stocks Repository Unit Tests', () => {
         date,
       );
 
-      expect(repResponse).resolves.toEqual(null);
+      await expect(repResponse).resolves.toEqual(null);
     });
   });
 
   describe('deleteStockRecordByDate', () => {
-    it('should inform that one record was deleted if it exists', () => {
+    it('should inform that one record was deleted if it exists', async () => {
       prisma.stocks.deleteMany = jest.fn().mockReturnValueOnce({ count: 1 });
 
       const date = new Date(testStockRecord1.day);
       const stock = testStockRecord1.stock;
 
       const repResponse = repository.deleteStockRecordByDate(stock, date);
-      expect(repResponse).resolves.toEqual({ count: 1 });
+      await expect(repResponse).resolves.toEqual({ count: 1 });
     });
 
-    it('should inform that no record was deleted if it does not exists', () => {
+    it('should inform that no record was deleted if it does not exists', async () => {
       prisma.stocks.deleteMany = jest.fn().mockReturnValueOnce({ count: 0 });
 
       const date = new Date(testStockRecord1.day);
       const stock = 'nothing';
 
       const repResponse = repository.deleteStockRecordByDate(stock, date);
-      expect(repResponse).resolves.toEqual({ count: 0 });
+      await expect(repResponse).resolves.toEqual({ count: 0 });
     });
   });
 
   describe('deleteStockRecordsByDateInterval', () => {
-    it('should inform that X records were deleted if they exist', () => {
+    it('should inform that X records were deleted if they exist', async () => {
       prisma.stocks.deleteMany = jest.fn().mockReturnValueOnce({ count: 5 });
 
       const startDate = new Date('2022-01-01');
@@ -109,10 +109,10 @@ describe('Stocks Repository Unit Tests', () => {
         startDate,
         endDate,
       );
-      expect(repResponse).resolves.toEqual({ count: 5 });
+      await expect(repResponse).resolves.toEqual({ count: 5 });
     });
 
-    it('should inform that no record was deleted if none exists', () => {
+    it('should inform that no record was deleted if none exists', async () => {
       prisma.stocks.deleteMany = jest.fn().mockReturnValueOnce({ count: 0 });
 
       const startDate = new Date('01/01/2022');
@@ -124,7 +124,7 @@ describe('Stocks Repository Unit Tests', () => {
         startDate,
         endDate,
       );
-      expect(repResponse).resolves.toEqual({ count: 0 });
+      await expect(repResponse).resolves.toEqual({ count: 0 });
     });
   });
 });
