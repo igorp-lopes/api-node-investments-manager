@@ -1,6 +1,16 @@
 const currentTime = new Date(Date.now());
 
+export const testRegisterStockRequest = {
+  stock: 'testStock',
+  day: new Date('2022-02-18'),
+  quotas: 55,
+  current_quota_value: 130,
+  contribution: 0,
+  category: 'international',
+};
+
 export const testStockRecord1 = {
+  id: 1,
   stock: 'testStock1',
   category: 'stocks',
   day: '2022-02-18',
