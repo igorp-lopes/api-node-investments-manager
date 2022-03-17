@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { StocksRepository } from './stocks.repository';
 import {
   RegisterStockRequestDto,
+  StocksRegisterEntity,
   StocksRegisterResponseDto,
 } from './stocks.models';
-import { Stocks } from '@prisma/client';
 import { ErrorsService } from '../core/errors/errors.service';
 import { StocksErrors } from './stocks.errors';
 
@@ -22,9 +22,9 @@ export class StocksService {
 
     const stockRecordData = await this.determineStockRecordData(data);
 
-    const createdStock = await this.stocksRepository.saveStock(stockRecordData);
+    await this.stocksRepository.saveStock(stockRecordData);
 
-    return StocksService.formatStockRecordDataResponse(createdStock);
+    return StocksService.formatStockRecordDataResponse(stockRecordData);
   }
 
   public async deleteStockRecords(
@@ -135,7 +135,7 @@ export class StocksService {
   }
 
   private static formatStockRecordDataResponse(
-    data: Stocks,
+    data: StocksRegisterEntity,
   ): StocksRegisterResponseDto {
     return {
       stock: data.stock,

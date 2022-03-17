@@ -7,21 +7,29 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export interface StocksRegisterEntity {
+export type StocksRegisterEntity = Omit<
+  Stocks,
+  'id' | 'createdAt' | 'updatedAt'
+>;
+
+export type Stocks = {
+  id: number;
   stock: string;
-  day: string;
+  day: Date;
+  investedValue: number;
+  currentValue: number;
   contribution: number;
   quotas: number;
   currentQuotaValue: number;
-  currentValue: number;
   meanQuotaValue: number;
-  investedValue: number;
   dailyVariation: number;
   dailyVariationPercent: number;
   variation: number;
   variationPercent: number;
   category: string;
-}
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export class RegisterStockRequestDto {
   @IsString()
