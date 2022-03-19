@@ -114,7 +114,7 @@ export class StocksService {
     stock: string,
     day: Date,
   ): Promise<boolean> {
-    const record = await this.stocksRepository.getPreviousStockRecordsFromDate(
+    const record = await this.stocksRepository.getStockRecordByNameAndDate(
       stock,
       day,
     );
@@ -145,8 +145,8 @@ export class StocksService {
       current_quota_value: data.currentQuotaValue,
       mean_quota_value: data.meanQuotaValue,
       contribution: data.contribution,
-      current_value: data.currentQuotaValue,
-      invested_value: data.meanQuotaValue,
+      current_value: data.currentValue,
+      invested_value: data.investedValue,
       daily_variation: data.dailyVariation,
       daily_variation_percent: data.dailyVariationPercent,
       variation: data.variation,
