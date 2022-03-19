@@ -44,6 +44,36 @@ describe('Stocks Repository Unit Tests', () => {
     });
   });
 
+  describe('getStockRecordByNameAndDate', () => {
+    it('should return a stock record if it exists', async () => {
+      prisma.stocks.findFirst = jest.fn().mockReturnValueOnce(testStockRecord1);
+
+      const stockName = 'testStock1';
+      const date = new Date('2022-02-19');
+
+      const repResponse = repository.getStockRecordByNameAndDate(
+        stockName,
+        date,
+      );
+
+      await expect(repResponse).resolves.toEqual(testStockRecord1);
+    });
+
+    it('should return no record if none exist', async () => {
+      prisma.stocks.findFirst = jest.fn().mockReturnValueOnce(null);
+
+      const stockName = 'nothing';
+      const date = new Date('2022-02-19');
+
+      const repResponse = repository.getStockRecordByNameAndDate(
+        stockName,
+        date,
+      );
+
+      await expect(repResponse).resolves.toEqual(null);
+    });
+  });
+
   describe('getPreviousStockRecordsFromDate', () => {
     it('should return a record if it exist', async () => {
       prisma.stocks.findFirst = jest.fn().mockReturnValueOnce(testStockRecord1);
