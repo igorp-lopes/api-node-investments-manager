@@ -44,6 +44,10 @@ describe('Stocks Service Unit Tests', () => {
     repository = module.get<StocksRepository>(StocksRepository);
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
@@ -153,6 +157,48 @@ describe('Stocks Service Unit Tests', () => {
         expect(addStockRecordResponse.mean_quota_value).toBeCloseTo(130.416);
 
         expect(addStockRecordResponse.invested_value).toBeCloseTo(7824.999);
+      });
+    });
+  });
+
+  describe('deleteStockRecords', () => {
+    describe('when deleting a single record', () => {
+      it('should delete the record if it exists, and inform that 1 record was deleted', async () => {
+        jest
+          .spyOn(repository, 'deleteStockRecordByDate')
+          .mockResolvedValueOnce({ count: 1 });
+
+        const stock = 'TESTSTOCK1';
+        const date = new Date('2022-02-19');
+
+        const deleteStockRecordsResponse = await service.deleteStockRecords(
+          stock,
+          date,
+        );
+
+        expect(deleteStockRecordsResponse).toHaveProperty('count');
+        expect(deleteStockRecordsResponse.count).toEqual(1);
+      });
+    });
+
+    describe('when deleting multiple record', () => {
+      it('should delete the records if they exists, and inform that X records were deleted', async () => {
+        jest
+          .spyOn(repository, 'deleteStockRecordsByDateInterval')
+          .mockResolvedValueOnce({ count: 4 });
+
+        const stock = 'TESTSTOCK1';
+        const startDate = new Date('2022-02-19');
+        const endDate = new Date('2022-03-19');
+
+        const deleteStockRecordsResponse = await service.deleteStockRecords(
+          stock,
+          startDate,
+          endDate,
+        );
+
+        expect(deleteStockRecordsResponse).toHaveProperty('count');
+        expect(deleteStockRecordsResponse.count).toEqual(4);
       });
     });
   });
