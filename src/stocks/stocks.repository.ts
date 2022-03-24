@@ -29,6 +29,15 @@ export class StocksRepository {
     });
   }
 
+  public async getStockRecordByNameAndDate(
+    stockName: string,
+    date: Date,
+  ): Promise<any> {
+    return this.prisma.stocks.findFirst({
+      where: { stock: stockName, day: date },
+    });
+  }
+
   public async getPreviousStockRecordsFromDate(
     stockName: string,
     date: Date,
