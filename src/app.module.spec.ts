@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ErrorsModule } from './core/errors/errors.module';
 import { StocksModule } from './stocks/stocks.module';
 
-describe('Stocks Module Unit Tests', () => {
+describe('App Module Unit Tests', () => {
   let errorsModule: ErrorsModule;
   let stocksModule: StocksModule;
 
