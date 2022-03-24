@@ -30,7 +30,7 @@ export class StocksService {
   public async deleteStockRecords(
     stockName: string,
     startDate: Date,
-    endDate: Date,
+    endDate?: Date,
   ): Promise<any> {
     if (!endDate) {
       return this.stocksRepository.deleteStockRecordByDate(
