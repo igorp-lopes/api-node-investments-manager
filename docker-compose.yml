@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 
 services:
   mysql-database:
@@ -12,4 +12,10 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./database:/var/lib/mysql
+      - manager-database:/var/lib/mysql
+
+volumes:
+  manager-database:
+    name: ${DATABASE_VOLUME_NAME}
+
+
