@@ -3,7 +3,6 @@ version: '3.4'
 services:
   mysql-database:
     image: mysql:8.0.27
-    restart: unless-stopped
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
@@ -12,8 +11,4 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - manager-database:/var/lib/mysql
-
-volumes:
-  manager-database:
-    name: ${DATABASE_VOLUME_NAME}
+      - ./database:/var/lib/mysql
