@@ -1,19 +1,15 @@
-version: '3.4'
+version: '3.9'
 
 services:
   mysql-database:
+    container_name: 'api-node-investments-manager-test-container'
     image: mysql:8.0.27
-    restart: unless-stopped
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: "investments-database"
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
-      - manager-database:/var/lib/mysql
-
-volumes:
-  manager-database:
-    name: ${DATABASE_VOLUME_NAME}
+      - ./tmp/testDatabase:/var/lib/mysql
