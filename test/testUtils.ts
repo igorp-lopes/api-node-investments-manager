@@ -1,4 +1,5 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { PrismaService } from 'src/core/prisma.service';
 
 export const setupGlobalModules = (app: INestApplication) => {
   app.useGlobalPipes(
@@ -7,4 +8,12 @@ export const setupGlobalModules = (app: INestApplication) => {
       whitelist: true,
     }),
   );
+};
+
+export const cleanupDatabase = async (prisma: PrismaService) => {
+  const deleteStocksRecords = prisma.stocks.deleteMany();
+
+  await prisma.$transaction([deleteStocksRecords]);
+
+  await prisma.$disconnect();
 };
