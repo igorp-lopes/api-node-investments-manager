@@ -26,3 +26,19 @@ describe('Stocks End-to-End Tests', () => {
     await cleanupDatabase(prisma);
   });
 });
+
+const createStockRecordDTO = (
+  name,
+  day,
+  quotas,
+  currentQuotaValue,
+  category?,
+) => {
+  return {
+    stock: name,
+    day,
+    quotas,
+    current_quota_value: currentQuotaValue,
+    category: category ?? 'stocks',
+  };
+};
