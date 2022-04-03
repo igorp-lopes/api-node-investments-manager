@@ -32,9 +32,11 @@ describe('Stocks End-to-End Tests', () => {
     await cleanupDatabase(prisma);
   });
 
-  it('Creating a stock record without previous records', async () => {
-    const requestBody = testStockWithoutPreviousRecordRequest;
+  const cases = [
+    ['without previous records', testStockWithoutPreviousRecordRequest],
+  ];
 
+  it.each(cases)('Creating a stock record %s', async (name, requestBody) => {
     const postResponse = await request(app.getHttpServer())
       .post('/stocks')
       .send(requestBody);
