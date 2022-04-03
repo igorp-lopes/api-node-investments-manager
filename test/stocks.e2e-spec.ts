@@ -4,7 +4,10 @@ import * as request from 'supertest';
 import { StocksModule } from '../src/stocks/stocks.module';
 import { PrismaService } from '../src/core/prisma.service';
 import { cleanupDatabase, setupGlobalModules } from './testUtils';
-import { RegisterStockRequestDto } from '../src/stocks/stocks.models';
+import {
+  testStockWithoutPreviousRecordRequest,
+  testStockWithoutPreviousRecordResponse,
+} from './mocks/stockMocks';
 
 describe('Stocks End-to-End Tests', () => {
   let app: INestApplication;
@@ -20,6 +23,8 @@ describe('Stocks End-to-End Tests', () => {
 
     prisma = app.get<PrismaService>(PrismaService);
 
+    await cleanupDatabase(prisma);
+
     await app.init();
   });
 
@@ -28,12 +33,7 @@ describe('Stocks End-to-End Tests', () => {
   });
 
   it('Creating a stock record without previous records', async () => {
-    const requestBody = createStockRecordDTO(
-      'stockWithNoRecord',
-      '2022-04-01',
-      10,
-      55.5,
-    );
+    const requestBody = testStockWithoutPreviousRecordRequest;
 
     const postResponse = await request(app.getHttpServer())
       .post('/stocks')
@@ -41,34 +41,6 @@ describe('Stocks End-to-End Tests', () => {
     const content = postResponse.body;
 
     expect(postResponse.status).toEqual(201);
-    expect(content.stock).toEqual(requestBody.stock.toUpperCase());
-    expect(content.quotas).toEqual(requestBody.quotas);
-    expect(content.day).toEqual(requestBody.day);
-
-    expect(content.mean_quota_value).toBeCloseTo(55.5);
-    expect(content.contribution).toBeCloseTo(555);
-    expect(content.invested_value).toBeCloseTo(555);
-
-    expect(content.daily_variation).toBeCloseTo(0);
-    expect(content.daily_variation_percent).toBeCloseTo(0);
-
-    expect(content.variation).toBeCloseTo(0);
-    expect(content.variation_percent).toBeCloseTo(0);
+    expect(content).toMatchObject(testStockWithoutPreviousRecordResponse);
   });
 });
-
-const createStockRecordDTO = (
-  name,
-  day,
-  quotas,
-  currentQuotaValue,
-  category?,
-) => {
-  return {
-    stock: name,
-    day,
-    quotas,
-    current_quota_value: currentQuotaValue,
-    category: category ?? 'stocks',
-  } as RegisterStockRequestDto;
-};
