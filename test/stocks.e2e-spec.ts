@@ -9,6 +9,7 @@ import {
   testStockWithoutPreviousRecordResponse,
   testStockWithPreviousRecordRequest,
   testStockWithPreviousRecordResponse,
+  testStockWithRepeatedRecordRequest,
 } from './mocks/stockMocks';
 import { setupStocksDatabase } from './seeds/stocksSeeds';
 
@@ -61,4 +62,14 @@ describe('Stocks End-to-End Tests', () => {
       expect(content).toMatchObject(expectedResponse);
     },
   );
+
+  it('Creating a stock record that already exists', async () => {
+    const postResponse = await request(app.getHttpServer())
+      .post('/stocks')
+      .send(testStockWithRepeatedRecordRequest);
+    const content = postResponse.body;
+
+    expect(postResponse.status).toEqual(400);
+    expect(content.name).toEqual('EST001');
+  });
 });
