@@ -7,7 +7,10 @@ import { cleanupDatabase, setupGlobalModules } from './testUtils';
 import {
   testStockWithoutPreviousRecordRequest,
   testStockWithoutPreviousRecordResponse,
+  testStockWithPreviousRecordRequest,
+  testStockWithPreviousRecordResponse,
 } from './mocks/stockMocks';
+import { setupStocksDatabase } from './seeds/stocksSeeds';
 
 describe('Stocks End-to-End Tests', () => {
   let app: INestApplication;
@@ -24,6 +27,7 @@ describe('Stocks End-to-End Tests', () => {
     prisma = app.get<PrismaService>(PrismaService);
 
     await cleanupDatabase(prisma);
+    await setupStocksDatabase(prisma);
 
     await app.init();
   });
@@ -32,17 +36,29 @@ describe('Stocks End-to-End Tests', () => {
     await cleanupDatabase(prisma);
   });
 
-  const cases = [
-    ['without previous records', testStockWithoutPreviousRecordRequest],
+  const stockRecordCases = [
+    [
+      'without previous records',
+      testStockWithoutPreviousRecordRequest,
+      testStockWithoutPreviousRecordResponse,
+    ],
+    [
+      'with previous records',
+      testStockWithPreviousRecordRequest,
+      testStockWithPreviousRecordResponse,
+    ],
   ];
 
-  it.each(cases)('Creating a stock record %s', async (name, requestBody) => {
-    const postResponse = await request(app.getHttpServer())
-      .post('/stocks')
-      .send(requestBody);
-    const content = postResponse.body;
+  it.each(stockRecordCases)(
+    'Creating a stock record %s',
+    async (name, requestBody, expectedResponse) => {
+      const postResponse = await request(app.getHttpServer())
+        .post('/stocks')
+        .send(requestBody);
+      const content = postResponse.body;
 
-    expect(postResponse.status).toEqual(201);
-    expect(content).toMatchObject(testStockWithoutPreviousRecordResponse);
-  });
+      expect(postResponse.status).toEqual(201);
+      expect(content).toMatchObject(expectedResponse);
+    },
+  );
 });
