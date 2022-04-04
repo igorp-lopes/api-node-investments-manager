@@ -174,3 +174,10 @@ export const testStockWithPreviousRecordResponse: StocksRegisterResponseDto = {
   variation: -55,
   variation_percent: -0.06832298136645963,
 };
+
+export const testStockWithRepeatedRecordRequest = {
+  stock: 'stockWithRecord',
+  day: '2022-04-02',
+  quotas: 15,
+  current_quota_value: 50,
+};
