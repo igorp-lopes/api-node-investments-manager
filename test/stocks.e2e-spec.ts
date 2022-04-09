@@ -37,7 +37,7 @@ describe('Stocks End-to-End Tests', () => {
     await cleanupDatabase(prisma);
   });
 
-  const stockRecordCases = [
+  const createStockRecordCases = [
     [
       'without previous records',
       testStockWithoutPreviousRecordRequest,
@@ -50,9 +50,9 @@ describe('Stocks End-to-End Tests', () => {
     ],
   ];
 
-  it.each(stockRecordCases)(
+  it.each(createStockRecordCases)(
     'Creating a stock record %s',
-    async (name, requestBody, expectedResponse) => {
+    async (testName, requestBody, expectedResponse) => {
       const postResponse = await request(app.getHttpServer())
         .post('/stocks')
         .send(requestBody);
@@ -73,15 +73,26 @@ describe('Stocks End-to-End Tests', () => {
     expect(content.name).toEqual('EST001');
   });
 
-  it('Deleting a stock record from a single date', async () => {
-    const stockName = 'StockToBeDeleted';
-    const date = '2022-04-01';
-    const deleteResponse = await request(app.getHttpServer())
-      .delete(`/stocks/${stockName}`)
-      .query({ start_date: date });
-    const content = deleteResponse.body;
+  const deleteStockRecordCases = [
+    ['from a single date', '2022-04-01', '', 1],
+    ['from a date interval', '2022-04-02', '2022-04-03', 2],
+  ];
 
-    expect(deleteResponse.status).toEqual(200);
-    expect(content.count).toEqual(1);
-  });
+  it.each(deleteStockRecordCases)(
+    'Deleting stock records %s',
+    async (testName, startDate, endDate, totalDeleted) => {
+      const stockName = 'StockToBeDeleted';
+      const deleteResponse = await request(app.getHttpServer())
+        .delete(`/stocks/${stockName}`)
+        .query(
+          endDate
+            ? { start_date: startDate, end_date: endDate }
+            : { start_date: startDate },
+        );
+      const content = deleteResponse.body;
+
+      expect(deleteResponse.status).toEqual(200);
+      expect(content.count).toEqual(totalDeleted);
+    },
+  );
 });
