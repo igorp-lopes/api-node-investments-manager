@@ -72,4 +72,16 @@ describe('Stocks End-to-End Tests', () => {
     expect(postResponse.status).toEqual(400);
     expect(content.name).toEqual('EST001');
   });
+
+  it('Deleting a stock record from a single date', async () => {
+    const stockName = 'StockToBeDeleted';
+    const date = '2022-04-01';
+    const deleteResponse = await request(app.getHttpServer())
+      .delete(`/stocks/${stockName}`)
+      .query({ start_date: date });
+    const content = deleteResponse.body;
+
+    expect(deleteResponse.status).toEqual(200);
+    expect(content.count).toEqual(1);
+  });
 });
