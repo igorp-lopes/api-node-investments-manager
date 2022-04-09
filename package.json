@@ -18,11 +18,11 @@
     "stopTestDatabase": "docker-compose --env-file .env.test down -v",
     "preTest": "yarn startTestDatabase && dotenv -e .env.test yarn prisma migrate deploy",
     "postTest": "yarn stopTestDatabase",
-    "test": "dotenv -e .env.test jest",
-    "test:watch": "dotenv -e .env.test -- jest --watch",
-    "test:cov": "dotenv -e .env.test -- jest --coverage",
+    "test": "dotenv -e .env.test jest --config ./jest-spec.json",
+    "test:watch": "dotenv -e .env.test -- jest --watch --config ./jest-spec.json",
+    "test:cov": "dotenv -e .env.test -- jest --coverage --config ./jest-spec.json",
     "test:debug": "dotenv -e .env.test -- node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "yarn preTest && dotenv -e .env.test -- jest --config ./test/jest-e2e.json && yarn postTest"
+    "test:e2e": "yarn preTest && dotenv -e .env.test -- jest --config ./jest-e2e.json && yarn postTest"
   },
   "dependencies": {
     "@nestjs/common": "^8.4.0",
@@ -59,26 +59,5 @@
     "ts-node": "^10.7.0",
     "tsconfig-paths": "^3.13.0",
     "typescript": "^4.6.2"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coveragePathIgnorePatterns": [
-      "./src/main.ts"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node",
-    "verbose": true
   }
 }
