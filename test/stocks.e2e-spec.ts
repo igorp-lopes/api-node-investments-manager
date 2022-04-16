@@ -97,7 +97,7 @@ describe('Stocks End-to-End Tests', () => {
 
   test.each(deleteStockRecordCases)(
     'Deleting stock records that do not exists %s',
-    async (testName, startDate, endDate, totalDeleted) => {
+    async (testName, startDate, endDate) => {
       const stockName = 'StockThatDoNotExists';
       const deleteResponse = await request(app.getHttpServer())
         .delete(`/stocks/${stockName}`)
