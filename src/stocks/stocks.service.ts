@@ -32,18 +32,25 @@ export class StocksService {
     startDate: Date,
     endDate?: Date,
   ): Promise<any> {
+    let deletedRecords;
     if (!endDate) {
-      return this.stocksRepository.deleteStockRecordByDate(
+      deletedRecords = await this.stocksRepository.deleteStockRecordByDate(
         stockName,
         startDate,
       );
     } else {
-      return this.stocksRepository.deleteStockRecordsByDateInterval(
-        stockName,
-        startDate,
-        endDate,
-      );
+      deletedRecords =
+        await this.stocksRepository.deleteStockRecordsByDateInterval(
+          stockName,
+          startDate,
+          endDate,
+        );
     }
+    ErrorsService.validateCondition(
+      deletedRecords.count !== 0,
+      StocksErrors.EST002,
+    );
+    return deletedRecords;
   }
 
   private async determineStockRecordData(data: RegisterStockRequestDto) {
