@@ -179,6 +179,19 @@ describe('Stocks Service Unit Tests', () => {
         expect(deleteStockRecordsResponse).toHaveProperty('count');
         expect(deleteStockRecordsResponse.count).toEqual(1);
       });
+
+      it('should return an error if there is no record for the given stock on the given date', async () => {
+        jest
+          .spyOn(repository, 'deleteStockRecordByDate')
+          .mockResolvedValueOnce({ count: 0 });
+
+        const stock = 'TESTSTOCK1';
+        const date = new Date('2022-02-19');
+
+        await expect(
+          service.deleteStockRecords(stock, date),
+        ).rejects.toThrowError();
+      });
     });
 
     describe('when deleting multiple record', () => {
@@ -199,6 +212,20 @@ describe('Stocks Service Unit Tests', () => {
 
         expect(deleteStockRecordsResponse).toHaveProperty('count');
         expect(deleteStockRecordsResponse.count).toEqual(4);
+      });
+
+      it('should return an error if there is no record for the given stock on the given date', async () => {
+        jest
+          .spyOn(repository, 'deleteStockRecordsByDateInterval')
+          .mockResolvedValueOnce({ count: 0 });
+
+        const stock = 'TESTSTOCK1';
+        const startDate = new Date('2022-02-19');
+        const endDate = new Date('2022-03-19');
+
+        await expect(
+          service.deleteStockRecords(stock, startDate, endDate),
+        ).rejects.toThrowError();
       });
     });
   });

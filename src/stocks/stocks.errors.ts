@@ -8,4 +8,11 @@ export class StocksErrors {
     name: 'EST001',
     message: 'Stock record already exists',
   };
+
+  public static EST002: IdentifiedError = {
+    type: 'Not Found',
+    status: HttpStatus.NOT_FOUND,
+    name: 'EST002',
+    message: 'Stock record for the given stock and given date does not exists',
+  };
 }

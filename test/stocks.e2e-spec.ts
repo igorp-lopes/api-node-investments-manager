@@ -49,8 +49,7 @@ describe('Stocks End-to-End Tests', () => {
       testStockWithPreviousRecordResponse,
     ],
   ];
-
-  it.each(createStockRecordCases)(
+  test.each(createStockRecordCases)(
     'Creating a stock record %s',
     async (testName, requestBody, expectedResponse) => {
       const postResponse = await request(app.getHttpServer())
@@ -63,7 +62,7 @@ describe('Stocks End-to-End Tests', () => {
     },
   );
 
-  it('Creating a stock record that already exists', async () => {
+  test('Creating a stock record that already exists', async () => {
     const postResponse = await request(app.getHttpServer())
       .post('/stocks')
       .send(testStockWithRepeatedRecordRequest);
@@ -78,7 +77,7 @@ describe('Stocks End-to-End Tests', () => {
     ['from a date interval', '2022-04-02', '2022-04-03', 2],
   ];
 
-  it.each(deleteStockRecordCases)(
+  test.each(deleteStockRecordCases)(
     'Deleting stock records %s',
     async (testName, startDate, endDate, totalDeleted) => {
       const stockName = 'StockToBeDeleted';
@@ -93,6 +92,23 @@ describe('Stocks End-to-End Tests', () => {
 
       expect(deleteResponse.status).toEqual(200);
       expect(content.count).toEqual(totalDeleted);
+    },
+  );
+
+  test.each(deleteStockRecordCases)(
+    'Deleting stock records that do not exists %s',
+    async (testName, startDate, endDate) => {
+      const stockName = 'StockThatDoNotExists';
+      const deleteResponse = await request(app.getHttpServer())
+        .delete(`/stocks/${stockName}`)
+        .query(
+          endDate
+            ? { start_date: startDate, end_date: endDate }
+            : { start_date: startDate },
+        );
+      const error = deleteResponse.body;
+      expect(error.status).toEqual(404);
+      expect(error.name).toEqual('EST002');
     },
   );
 });
