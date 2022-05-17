@@ -31,7 +31,7 @@ model Stocks {
 
 model Reits {
   id    Int     @default(autoincrement()) @id
-  stock String
+  reit String
   day  DateTime @db.Date
   investedValue Float
   currentValue Float
