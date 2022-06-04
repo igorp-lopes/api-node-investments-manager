@@ -28,3 +28,24 @@ model Stocks {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @default(now())
 }
+
+model Reits {
+  id    Int     @default(autoincrement()) @id
+  reit String
+  day  DateTime @db.Date
+  investedValue Float
+  currentValue Float
+  contribution Float
+  quotas Int
+  currentQuotaValue Float
+  meanQuotaValue  Float
+  dailyVariation Float
+  dailyVariationPercent Float
+  variation Float
+  variationPercent Float
+  dividends Float
+  totalDividends Float
+  category String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now())
+}
