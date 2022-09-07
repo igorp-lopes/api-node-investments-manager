@@ -12,4 +12,4 @@ services:
     ports:
       - "${DATABASE_PORT}:3306"
     volumes:
-      - ./tmp/testDatabase:/var/lib/mysql
+      - ./tmp/${ENV}Database:/var/lib/mysql
