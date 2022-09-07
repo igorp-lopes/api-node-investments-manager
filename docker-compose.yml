@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   mysql-database:
-    container_name: 'api-node-investments-manager-test-container'
+    container_name: "api-node-investments-manager-${ENV}-container"
     image: mysql:8.0.27
     environment:
       MYSQL_USER: ${MYSQL_USER}
@@ -10,6 +10,6 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: "investments-database"
     ports:
-      - "3307:3306"
+      - "${DATABASE_PORT}:3306"
     volumes:
       - ./tmp/testDatabase:/var/lib/mysql
