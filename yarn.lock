@@ -1927,6 +1927,7 @@ __metadata:
     jest: ^29.3.1
     nestjs-pino: ^3.1.2
     pino: ^8.10.0
+    pino-http: ^8.3.3
     prettier: ^2.8.3
     prisma: ^4.8.1
     reflect-metadata: ^0.1.13
@@ -5589,6 +5590,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pino-http@npm:^8.3.3":
+  version: 8.3.3
+  resolution: "pino-http@npm:8.3.3"
+  dependencies:
+    get-caller-file: ^2.0.5
+    pino: ^8.0.0
+    pino-std-serializers: ^6.0.0
+    process-warning: ^2.0.0
+  checksum: 6d9fb4f9230dce04d934b3d6179b2b9a14654e8e0e6cb7344cd1d8baeb53d5c42e1d169dffe350379bfeb9e41b59dc0ec417fe86eb01d49a21e2bac031c2803e
+  languageName: node
+  linkType: hard
+
 "pino-std-serializers@npm:^6.0.0":
   version: 6.1.0
   resolution: "pino-std-serializers@npm:6.1.0"
@@ -5596,7 +5609,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:^8.10.0":
+"pino@npm:^8.0.0, pino@npm:^8.10.0":
   version: 8.10.0
   resolution: "pino@npm:8.10.0"
   dependencies:
