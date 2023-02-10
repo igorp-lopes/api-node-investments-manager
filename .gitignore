@@ -37,3 +37,6 @@ lerna-debug.log*
 
 # Test database files
 /tmp
+
+# Yarn related files
+.yarn
