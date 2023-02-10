@@ -7,7 +7,14 @@ import { ReitsModule } from './reits/reits.module';
 import { LoggerModule } from 'nestjs-pino';
 
 @Module({
-  imports: [LoggerModule.forRoot(), StocksModule, ErrorsModule, ReitsModule],
+  imports: [
+    LoggerModule.forRoot({
+      pinoHttp: { transport: { target: 'pino-pretty' } },
+    }),
+    StocksModule,
+    ErrorsModule,
+    ReitsModule,
+  ],
   providers: [
     {
       provide: APP_FILTER,
