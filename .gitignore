@@ -40,3 +40,6 @@ lerna-debug.log*
 
 # Yarn related files
 .yarn
+
+# Log files location
+/.logs/
