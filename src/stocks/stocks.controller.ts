@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Param, Post, Query } from '@nestjs/common';
 import { StocksService } from './stocks.service';
+import { StocksRegisterResponseDto } from './stocks.models';
 import {
-  DeleteStockRecordsQueryDto,
-  RegisterStockRequestDto,
-  StocksRegisterResponseDto,
-} from './stocks.models';
+  DeleteStockRecordsRequestSchema,
+  RegisterStockRequestSchema,
+} from './stocks.schemas';
 
 @Controller('stocks')
 export class StocksController {
@@ -12,7 +12,7 @@ export class StocksController {
 
   @Post()
   async addStockRecord(
-    @Body() stockData: RegisterStockRequestDto,
+    @Body() stockData: RegisterStockRequestSchema,
   ): Promise<StocksRegisterResponseDto> {
     return this.stocksService.addStockRecord(stockData);
   }
@@ -20,7 +20,7 @@ export class StocksController {
   @Delete('/:stock_name')
   async deleteStockRecord(
     @Param() params,
-    @Query() query: DeleteStockRecordsQueryDto,
+    @Query() query: DeleteStockRecordsRequestSchema,
   ): Promise<any> {
     const stockName = params.stock_name;
     const startDate = query.start_date;

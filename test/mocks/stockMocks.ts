@@ -1,10 +1,8 @@
 import { Prisma, Stocks } from '@prisma/client';
-import {
-  RegisterStockRequestDto,
-  StocksRegisterResponseDto,
-} from '../../src/stocks/stocks.models';
+import { StocksRegisterResponseDto } from '../../src/stocks/stocks.models';
+import { RegisterStockRequestSchema } from '../../src/stocks/stocks.schemas';
 
-export const testRegisterStockRequest1: RegisterStockRequestDto = {
+export const testRegisterStockRequest1: RegisterStockRequestSchema = {
   stock: 'testStock1',
   day: new Date('2022-02-18'),
   quotas: 55,
@@ -48,7 +46,7 @@ export const testRegisterStockResponse1: StocksRegisterResponseDto = {
   variation_percent: 0,
 };
 
-export const testRegisterStockRequest2: RegisterStockRequestDto = {
+export const testRegisterStockRequest2: RegisterStockRequestSchema = {
   stock: 'testStock1',
   day: new Date('2022-02-19'),
   quotas: 60,

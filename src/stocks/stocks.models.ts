@@ -1,11 +1,4 @@
-import {
-  IsDate,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { RegisterStockRequestSchema } from './stocks.schemas';
 
 export type StocksRegisterEntity = Omit<
   Stocks,
@@ -31,42 +24,6 @@ export type Stocks = {
   updatedAt: Date;
 };
 
-export class RegisterStockRequestDto {
-  @IsString()
-  readonly stock: string;
-
-  @Type(() => Date)
-  @IsDate()
-  readonly day: Date;
-
-  @IsNumber()
-  @IsOptional()
-  readonly contribution: number;
-
-  @IsNumber()
-  @IsPositive()
-  readonly quotas: number;
-
-  @IsNumber()
-  @IsPositive()
-  readonly current_quota_value: number;
-
-  @IsString()
-  @IsOptional()
-  readonly category: string;
-}
-
-export class DeleteStockRecordsQueryDto {
-  @Type(() => Date)
-  @IsDate()
-  readonly start_date: Date;
-
-  @Type(() => Date)
-  @IsDate()
-  @IsOptional()
-  readonly end_date: Date;
-}
-
 export interface StocksRegisterResponseDto {
   stock: string;
   day: string;
@@ -84,7 +41,7 @@ export interface StocksRegisterResponseDto {
 }
 
 export function mapStockRegisterRequestToModel(
-  request: RegisterStockRequestDto,
+  request: RegisterStockRequestSchema,
 ) {
   return {
     stock: request,

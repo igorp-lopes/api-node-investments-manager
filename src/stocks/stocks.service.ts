@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { StocksRepository } from './stocks.repository';
 import {
-  RegisterStockRequestDto,
   StocksRegisterEntity,
   StocksRegisterResponseDto,
 } from './stocks.models';
 import { ErrorsService } from '../core/errors/errors.service';
 import { StocksErrors } from './stocks.errors';
+import { RegisterStockRequestSchema } from './stocks.schemas';
 
 @Injectable()
 export class StocksService {
   constructor(private stocksRepository: StocksRepository) {}
 
   public async addStockRecord(
-    data: RegisterStockRequestDto,
+    data: RegisterStockRequestSchema,
   ): Promise<StocksRegisterResponseDto> {
     ErrorsService.validateCondition(
       !(await this.validateIfRecordExists(data.stock, data.day)),
@@ -53,7 +53,7 @@ export class StocksService {
     return deletedRecords;
   }
 
-  private async determineStockRecordData(data: RegisterStockRequestDto) {
+  private async determineStockRecordData(data: RegisterStockRequestSchema) {
     const { stock, day, quotas } = data;
     const currentQuotaValue = data.current_quota_value;
     let meanQuotaValue: number;
