@@ -9,7 +9,7 @@ import {
   testStockRecord2,
 } from '../../test/mocks/stockMocks';
 import { ErrorsService } from '../core/errors/errors.service';
-import { StocksRegisterResponseDto } from './stocks.models';
+import { StockClientEntity } from './stocks.models';
 
 const db = {
   stocks: {
@@ -54,7 +54,7 @@ describe('Stocks Service Unit Tests', () => {
 
   describe('addStockRecord', () => {
     const basicStockRecordValidation = (
-      stockRecord: StocksRegisterResponseDto,
+      stockRecord: StockClientEntity,
       registerStockRequest,
     ) => {
       expect(stockRecord.stock).toEqual(

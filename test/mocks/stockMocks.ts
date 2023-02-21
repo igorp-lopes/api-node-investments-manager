@@ -1,8 +1,8 @@
 import { Prisma, Stocks } from '@prisma/client';
-import { StocksRegisterResponseDto } from '../../src/stocks/stocks.models';
-import { RegisterStockRequestSchema } from '../../src/stocks/stocks.schemas';
+import { StockClientEntity } from '../../src/stocks/stocks.models';
+import { RegisterStockRequest } from '../../src/stocks/stocks.schemas';
 
-export const testRegisterStockRequest1: RegisterStockRequestSchema = {
+export const testRegisterStockRequest1: RegisterStockRequest = {
   stock: 'testStock1',
   day: new Date('2022-02-18'),
   quotas: 55,
@@ -30,7 +30,7 @@ export const testStockRecord1: Stocks = {
   updatedAt: new Date('2022-03-18T00:47:19.292Z'),
 };
 
-export const testRegisterStockResponse1: StocksRegisterResponseDto = {
+export const testRegisterStockResponse1: StockClientEntity = {
   stock: 'TESTSTOCK1',
   category: 'international',
   day: '2022-02-18',
@@ -46,7 +46,7 @@ export const testRegisterStockResponse1: StocksRegisterResponseDto = {
   variation_percent: 0,
 };
 
-export const testRegisterStockRequest2: RegisterStockRequestSchema = {
+export const testRegisterStockRequest2: RegisterStockRequest = {
   stock: 'testStock1',
   day: new Date('2022-02-19'),
   quotas: 60,
@@ -74,7 +74,7 @@ export const testStockRecord2: Stocks = {
   updatedAt: new Date('2022-03-19T00:47:19.292Z'),
 };
 
-export const testRegisterStockResponse2: StocksRegisterResponseDto = {
+export const testRegisterStockResponse2: StockClientEntity = {
   stock: 'TESTSTOCK1',
   category: 'international',
   day: '2022-02-19',
@@ -115,22 +115,21 @@ export const testStockWithoutPreviousRecord: Prisma.StocksCreateInput = {
   updatedAt: '2022-04-03T17:33:47.202Z',
 };
 
-export const testStockWithoutPreviousRecordResponse: StocksRegisterResponseDto =
-  {
-    stock: 'STOCKWITHNORECORD',
-    category: 'stocks',
-    day: '2022-04-01',
-    quotas: 10,
-    current_quota_value: 55.5,
-    mean_quota_value: 55.5,
-    contribution: 555,
-    current_value: 555,
-    invested_value: 555,
-    daily_variation: 0,
-    daily_variation_percent: 0,
-    variation: 0,
-    variation_percent: 0,
-  };
+export const testStockWithoutPreviousRecordResponse: StockClientEntity = {
+  stock: 'STOCKWITHNORECORD',
+  category: 'stocks',
+  day: '2022-04-01',
+  quotas: 10,
+  current_quota_value: 55.5,
+  mean_quota_value: 55.5,
+  contribution: 555,
+  current_value: 555,
+  invested_value: 555,
+  daily_variation: 0,
+  daily_variation_percent: 0,
+  variation: 0,
+  variation_percent: 0,
+};
 
 export const testStockWithPreviousRecordRequest = {
   stock: 'stockWithRecord',
@@ -157,7 +156,7 @@ export const testStockWithPreviousRecord: Prisma.StocksCreateInput = {
   updatedAt: '2022-04-03T17:33:47.202Z',
 };
 
-export const testStockWithPreviousRecordResponse: StocksRegisterResponseDto = {
+export const testStockWithPreviousRecordResponse: StockClientEntity = {
   stock: 'STOCKWITHRECORD',
   category: 'stocks',
   day: '2022-04-02',

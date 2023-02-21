@@ -7,7 +7,7 @@ import {
   IsString,
 } from 'class-validator';
 
-export class RegisterStockRequestSchema {
+export class RegisterStockRequest {
   @IsString()
   readonly stock: string;
 
@@ -32,7 +32,7 @@ export class RegisterStockRequestSchema {
   readonly category: string;
 }
 
-export class DeleteStockRecordsRequestSchema {
+export class DeleteStockRecordsRequest {
   @Type(() => Date)
   @IsDate()
   readonly start_date: Date;
