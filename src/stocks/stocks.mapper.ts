@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import {
-  Stocks,
-  StocksClientEntity,
-  StocksPersistenceEntity,
+  Stock,
+  StockClientEntity,
+  StockPersistenceEntity,
 } from './stocks.models';
 import { RegisterStockRequest } from './stocks.schemas';
 import { BaseMapper } from '../core/mapper/baseMapper';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class StocksMapper
-  implements BaseMapper<Stocks, StocksClientEntity, StocksPersistenceEntity>
+  implements BaseMapper<Stock, StockClientEntity, StockPersistenceEntity>
 {
-  public fromEntityToClient(entity: Stocks): StocksClientEntity {
+  public fromEntityToClient(entity: Stock): StockClientEntity {
     return {
       stock: entity.stock,
       day: entity.day.toISOString().split('T')[0],
@@ -29,11 +30,11 @@ export class StocksMapper
     };
   }
 
-  public fromEntityToClientBulk(entities: Stocks[]): StocksClientEntity[] {
+  public fromEntityToClientBulk(entities: Stock[]): StockClientEntity[] {
     return entities.map(this.fromEntityToClient);
   }
 
-  public fromEntityToPersistence(entity: Stocks): StocksPersistenceEntity {
+  public fromEntityToPersistence(entity: Stock): StockPersistenceEntity {
     const currentTime = new Date(Date.now());
 
     return {
@@ -51,18 +52,18 @@ export class StocksMapper
       variation: entity.variation,
       variationPercent: entity.variationPercent,
       category: entity.category,
-      createdAt: currentTime.toISOString(),
-      updatedAt: currentTime.toISOString(),
+      createdAt: currentTime,
+      updatedAt: currentTime,
     };
   }
 
   public fromEntityToPersistenceBulk(
-    entities: Stocks[],
-  ): StocksPersistenceEntity[] {
+    entities: Stock[],
+  ): StockPersistenceEntity[] {
     return entities.map(this.fromEntityToPersistence);
   }
 
-  public fromPersistenceToEntity(persistence: StocksPersistenceEntity): Stocks {
+  public fromPersistenceToEntity(persistence: StockPersistenceEntity): Stock {
     return {
       id: persistence.id,
       stock: persistence.stock.toUpperCase(),
@@ -78,19 +79,25 @@ export class StocksMapper
       variation: persistence.variation,
       variationPercent: persistence.variationPercent,
       category: persistence.category,
-      createdAt: new Date(persistence.createdAt),
-      updatedAt: new Date(persistence.updatedAt),
     };
   }
 
-  public buildStock(request: RegisterStockRequest) {
+  public buildStock(request: RegisterStockRequest): Stock {
     return {
-      stock: request,
+      id: uuidv4(),
+      stock: request.stock.toUpperCase(),
       day: request.day,
       contribution: request.contribution,
       quotas: request.quotas,
       currentQuotaValue: request.current_quota_value,
       category: request.category,
+      currentValue: 0,
+      meanQuotaValue: 0,
+      investedValue: 0,
+      dailyVariation: 0,
+      dailyVariationPercent: 0,
+      variation: 0,
+      variationPercent: 0,
     };
   }
 }
