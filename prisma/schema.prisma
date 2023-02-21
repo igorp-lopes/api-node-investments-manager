@@ -11,41 +11,41 @@ datasource db {
 }
 
 model Stocks {
-  id    Int     @default(autoincrement()) @id
-  stock String
-  day  DateTime @db.Date
-  investedValue Float
-  currentValue Float
-  contribution Float
-  quotas Int
-  currentQuotaValue Float
-  meanQuotaValue  Float
-  dailyVariation Float
+  id                    String   @id @default(uuid())
+  stock                 String
+  day                   DateTime @db.Date
+  investedValue         Float
+  currentValue          Float
+  contribution          Float
+  quotas                Int
+  currentQuotaValue     Float
+  meanQuotaValue        Float
+  dailyVariation        Float
   dailyVariationPercent Float
-  variation Float
-  variationPercent Float
-  category String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @default(now())
+  variation             Float
+  variationPercent      Float
+  category              String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @default(now())
 }
 
 model Reits {
-  id    Int     @default(autoincrement()) @id
-  reit String
-  day  DateTime @db.Date
-  investedValue Float
-  currentValue Float
-  contribution Float
-  quotas Int
-  currentQuotaValue Float
-  meanQuotaValue  Float
-  dailyVariation Float
+  id                    String   @id @default(uuid())
+  reit                  String
+  day                   DateTime @db.Date
+  investedValue         Float
+  currentValue          Float
+  contribution          Float
+  quotas                Int
+  currentQuotaValue     Float
+  meanQuotaValue        Float
+  dailyVariation        Float
   dailyVariationPercent Float
-  variation Float
-  variationPercent Float
-  dividends Float
-  totalDividends Float
-  category String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @default(now())
+  variation             Float
+  variationPercent      Float
+  dividends             Float
+  totalDividends        Float
+  category              String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @default(now())
 }

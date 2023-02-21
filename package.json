@@ -38,7 +38,8 @@
     "pino-pretty": "^9.1.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.1.0",
-    "rxjs": "^7.8.0"
+    "rxjs": "^7.8.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.1.8",
