@@ -13,7 +13,7 @@ export class ReitsRepository {
   public async testSaveReits() {
     const data = {
       reit: 'TESTREIT',
-      day: '2022-05-16',
+      date: '2022-05-16',
       investedValue: 1,
       currentValue: 1,
       contribution: 1,

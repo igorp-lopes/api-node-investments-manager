@@ -15,7 +15,7 @@ export class StocksMapper
   public fromEntityToClient(entity: Stock): StockClientEntity {
     return {
       stock: entity.stock,
-      day: entity.day.toISOString().split('T')[0],
+      date: entity.date.toISOString().split('T')[0],
       contribution: entity.contribution,
       quotas: entity.quotas,
       current_quota_value: entity.currentQuotaValue,
@@ -40,7 +40,7 @@ export class StocksMapper
     return {
       id: entity.id,
       stock: entity.stock.toUpperCase(),
-      day: entity.day,
+      date: entity.date,
       contribution: entity.contribution,
       quotas: entity.quotas,
       currentQuotaValue: entity.currentQuotaValue,
@@ -67,7 +67,7 @@ export class StocksMapper
     return {
       id: persistence.id,
       stock: persistence.stock.toUpperCase(),
-      day: persistence.day,
+      date: persistence.date,
       contribution: persistence.contribution,
       quotas: persistence.quotas,
       currentQuotaValue: persistence.currentQuotaValue,
@@ -86,7 +86,7 @@ export class StocksMapper
     return {
       id: uuidv4(),
       stock: request.stock.toUpperCase(),
-      day: request.day,
+      date: request.date,
       contribution: request.contribution,
       quotas: request.quotas,
       currentQuotaValue: request.current_quota_value,

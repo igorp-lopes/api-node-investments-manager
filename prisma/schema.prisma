@@ -13,7 +13,7 @@ datasource db {
 model Stocks {
   id                    String   @id @default(uuid())
   stock                 String
-  day                   DateTime @db.Date
+  date                  DateTime @db.Date
   investedValue         Float
   currentValue          Float
   contribution          Float
@@ -32,7 +32,7 @@ model Stocks {
 model Reits {
   id                    String   @id @default(uuid())
   reit                  String
-  day                   DateTime @db.Date
+  date                  DateTime @db.Date
   investedValue         Float
   currentValue          Float
   contribution          Float

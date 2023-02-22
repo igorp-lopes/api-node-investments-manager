@@ -17,7 +17,7 @@ export class StocksRepository {
 
   public async deleteStockRecordByDate(stockName: string, date: Date) {
     return this.prisma.stocks.deleteMany({
-      where: { stock: stockName, day: date },
+      where: { stock: stockName, date: date },
     });
   }
 
@@ -27,27 +27,27 @@ export class StocksRepository {
     endDate: Date,
   ) {
     return this.prisma.stocks.deleteMany({
-      where: { stock: stockName, day: { gte: startDate, lte: endDate } },
+      where: { stock: stockName, date: { gte: startDate, lte: endDate } },
     });
   }
 
   public async getStockRecordByNameAndDate(stockName: string, date: Date) {
     const stock = await this.prisma.stocks.findFirst({
-      where: { stock: stockName, day: date },
+      where: { stock: stockName, date: date },
     });
-    return this.stocksMapper.fromPersistenceToEntity(stock);
+    return stock && this.stocksMapper.fromPersistenceToEntity(stock);
   }
 
   public async getPreviousStockRecordsFromDate(stockName: string, date: Date) {
     const stock = await this.prisma.stocks.findFirst({
       where: {
         stock: stockName,
-        day: { lte: date },
+        date: { lte: date },
       },
       orderBy: {
-        day: 'desc',
+        date: 'desc',
       },
     });
-    return this.stocksMapper.fromPersistenceToEntity(stock);
+    return stock && this.stocksMapper.fromPersistenceToEntity(stock);
   }
 }

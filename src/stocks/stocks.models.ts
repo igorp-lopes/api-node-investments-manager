@@ -1,7 +1,7 @@
 export type Stock = {
   id: string;
   stock: string;
-  day: Date;
+  date: Date;
   investedValue: number;
   currentValue: number;
   contribution: number;
@@ -17,7 +17,7 @@ export type Stock = {
 
 export type StockClientEntity = {
   stock: string;
-  day: string;
+  date: string;
   contribution: number;
   quotas: number;
   current_quota_value: number;
@@ -34,7 +34,7 @@ export type StockClientEntity = {
 export type StockPersistenceEntity = {
   id: string;
   stock: string;
-  day: Date;
+  date: Date;
   investedValue: number;
   currentValue: number;
   contribution: number;

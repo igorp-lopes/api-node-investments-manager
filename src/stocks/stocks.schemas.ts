@@ -13,7 +13,7 @@ export class RegisterStockRequest {
 
   @Type(() => Date)
   @IsDate()
-  readonly day: Date;
+  readonly date: Date;
 
   @IsNumber()
   @IsOptional()

@@ -14,7 +14,7 @@ export class StocksService {
 
   public async addStockRecord(data: Stock) {
     ErrorsService.validateCondition(
-      !(await this.validateIfRecordExists(data.stock, data.day)),
+      !(await this.validateIfRecordExists(data.stock, data.date)),
       StocksErrors.EST001,
     );
 
@@ -57,7 +57,7 @@ export class StocksService {
     const mostRecentPreviousRecord =
       await this.stocksRepository.getPreviousStockRecordsFromDate(
         stockRecord.stock,
-        stockRecord.day,
+        stockRecord.date,
       );
 
     if (!mostRecentPreviousRecord) {
@@ -85,27 +85,29 @@ export class StocksService {
     stockRecord: Stock,
     previousRecord: Stock,
   ) {
-    const { quotas, currentQuotaValue } = stockRecord;
+    const currentValue = stockRecord.quotas * stockRecord.currentQuotaValue;
 
-    const quotaDiff = quotas - previousRecord.quotas;
+    const quotaDiff = stockRecord.quotas - previousRecord.quotas;
     const contribution = quotaDiff
-      ? (quotas - previousRecord.quotas) * currentQuotaValue
+      ? quotaDiff * stockRecord.currentQuotaValue
       : 0;
 
     const meanQuotaValue = StocksService.calculateMeanQuotaValue(
       previousRecord.meanQuotaValue,
       previousRecord.quotas,
-      currentQuotaValue,
+      stockRecord.currentQuotaValue,
       quotaDiff,
     );
 
     const dailyVariation =
-      quotas * currentQuotaValue - previousRecord.currentValue - contribution;
+      currentValue - previousRecord.currentValue - contribution;
 
     const dailyVariationPercent = dailyVariation / previousRecord.currentValue;
 
-    const variation = quotas * currentQuotaValue - quotas * meanQuotaValue;
-    const variationPercent = variation / (quotas * meanQuotaValue);
+    const investedValue = stockRecord.quotas * meanQuotaValue;
+
+    const variation = currentValue - investedValue;
+    const variationPercent = variation / investedValue;
 
     return {
       ...stockRecord,
@@ -115,6 +117,8 @@ export class StocksService {
       dailyVariationPercent,
       variation,
       variationPercent,
+      currentValue,
+      investedValue,
     };
   }
 
