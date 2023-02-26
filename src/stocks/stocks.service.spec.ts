@@ -3,13 +3,16 @@ import { StocksService } from './stocks.service';
 import { StocksRepository } from './stocks.repository';
 import { PrismaService } from '../core/prisma.service';
 import {
+  testMappedStock1,
+  testMappedStock2,
   testRegisterStockRequest1,
   testRegisterStockRequest2,
   testStockRecord1,
   testStockRecord2,
 } from '../../test/mocks/stockMocks';
 import { ErrorsService } from '../core/errors/errors.service';
-import { StockClientEntity } from './stocks.models';
+import { Stock } from './stocks.models';
+import { StocksMapper } from './stocks.mapper';
 
 const db = {
   stocks: {
@@ -17,10 +20,6 @@ const db = {
     create: jest.fn().mockReturnValue(null),
     delete: jest.fn().mockResolvedValue(null),
   },
-};
-
-const convertDateToProperString = (date) => {
-  return date.toISOString().split('T')[0];
 };
 
 describe('Stocks Service Unit Tests', () => {
@@ -33,6 +32,7 @@ describe('Stocks Service Unit Tests', () => {
         StocksService,
         StocksRepository,
         ErrorsService,
+        StocksMapper,
         {
           provide: PrismaService,
           useValue: db,
@@ -53,34 +53,14 @@ describe('Stocks Service Unit Tests', () => {
   });
 
   describe('addStockRecord', () => {
-    const basicStockRecordValidation = (
-      stockRecord: StockClientEntity,
-      registerStockRequest,
-    ) => {
-      expect(stockRecord.stock).toEqual(
-        registerStockRequest.stock.toUpperCase(),
-      );
-      expect(stockRecord.day).toEqual(
-        convertDateToProperString(registerStockRequest.day),
-      );
-      expect(stockRecord.quotas).toEqual(registerStockRequest.quotas);
-      expect(stockRecord.current_quota_value).toEqual(
-        registerStockRequest.current_quota_value,
-      );
-      expect(stockRecord.contribution).toEqual(
-        registerStockRequest.contribution,
-      );
-      expect(stockRecord.category).toEqual(registerStockRequest.category);
-    };
-
     describe('when adding a record that already exists', () => {
-      it('should return a error when there is already record on the same date', async () => {
+      it('should return a error that there is already record on the same date', async () => {
         jest
           .spyOn(repository, 'getStockRecordByNameAndDate')
           .mockResolvedValueOnce(testStockRecord1);
 
         await expect(
-          service.addStockRecord(testRegisterStockRequest1),
+          service.addStockRecord(testMappedStock1),
         ).rejects.toThrowError();
       });
     });
@@ -100,7 +80,7 @@ describe('Stocks Service Unit Tests', () => {
           .mockResolvedValueOnce(testStockRecord1);
 
         const addStockRecordResponse = await service.addStockRecord(
-          testRegisterStockRequest1,
+          testMappedStock1,
         );
 
         basicStockRecordValidation(
@@ -109,17 +89,17 @@ describe('Stocks Service Unit Tests', () => {
         );
 
         expect(addStockRecordResponse.variation).toBeCloseTo(0);
-        expect(addStockRecordResponse.variation_percent).toBeCloseTo(0);
-        expect(addStockRecordResponse.daily_variation).toBeCloseTo(0);
-        expect(addStockRecordResponse.daily_variation_percent).toBeCloseTo(0);
+        expect(addStockRecordResponse.variationPercent).toBeCloseTo(0);
+        expect(addStockRecordResponse.dailyVariation).toBeCloseTo(0);
+        expect(addStockRecordResponse.dailyVariationPercent).toBeCloseTo(0);
 
-        expect(addStockRecordResponse.mean_quota_value).toBeCloseTo(
+        expect(addStockRecordResponse.meanQuotaValue).toBeCloseTo(
           testRegisterStockRequest1.current_quota_value,
         );
 
-        expect(addStockRecordResponse.invested_value).toBeCloseTo(
+        expect(addStockRecordResponse.investedValue).toBeCloseTo(
           testRegisterStockRequest1.quotas *
-            addStockRecordResponse.mean_quota_value,
+            addStockRecordResponse.meanQuotaValue,
         );
       });
     });
@@ -139,7 +119,7 @@ describe('Stocks Service Unit Tests', () => {
           .mockResolvedValueOnce(testStockRecord2);
 
         const addStockRecordResponse = await service.addStockRecord(
-          testRegisterStockRequest2,
+          testMappedStock2,
         );
 
         basicStockRecordValidation(
@@ -148,15 +128,13 @@ describe('Stocks Service Unit Tests', () => {
         );
 
         expect(addStockRecordResponse.variation).toBeCloseTo(275);
-        expect(addStockRecordResponse.variation_percent).toBeCloseTo(0.035);
-        expect(addStockRecordResponse.daily_variation).toBeCloseTo(275);
-        expect(addStockRecordResponse.daily_variation_percent).toBeCloseTo(
-          0.038,
-        );
+        expect(addStockRecordResponse.variationPercent).toBeCloseTo(0.035);
+        expect(addStockRecordResponse.dailyVariation).toBeCloseTo(275);
+        expect(addStockRecordResponse.dailyVariationPercent).toBeCloseTo(0.038);
 
-        expect(addStockRecordResponse.mean_quota_value).toBeCloseTo(130.416);
+        expect(addStockRecordResponse.meanQuotaValue).toBeCloseTo(130.416);
 
-        expect(addStockRecordResponse.invested_value).toBeCloseTo(7824.999);
+        expect(addStockRecordResponse.investedValue).toBeCloseTo(7824.999);
       });
     });
   });
@@ -230,3 +208,14 @@ describe('Stocks Service Unit Tests', () => {
     });
   });
 });
+
+function basicStockRecordValidation(stockRecord: Stock, registerStockRequest) {
+  expect(stockRecord.stock).toEqual(registerStockRequest.stock.toUpperCase());
+  expect(stockRecord.date).toEqual(registerStockRequest.date);
+  expect(stockRecord.quotas).toEqual(registerStockRequest.quotas);
+  expect(stockRecord.currentQuotaValue).toEqual(
+    registerStockRequest.current_quota_value,
+  );
+  expect(stockRecord.contribution).toEqual(registerStockRequest.contribution);
+  expect(stockRecord.category).toEqual(registerStockRequest.category);
+}

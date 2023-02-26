@@ -1,21 +1,72 @@
 import { Prisma, Stocks } from '@prisma/client';
-import { StockClientEntity } from '../../src/stocks/stocks.models';
+import { Stock, StockClientEntity } from '../../src/stocks/stocks.models';
 import { RegisterStockRequest } from '../../src/stocks/stocks.schemas';
+import { v4 as uuidv4 } from 'uuid';
+
+export const stockRepositoryResponse = {
+  id: uuidv4(),
+  stock: 'TESTSTOCK1',
+  category: 'international',
+  date: new Date('2022-02-18'),
+  quotas: 55,
+  currentQuotaValue: 130,
+  meanQuotaValue: 130,
+  contribution: 7150,
+  currentValue: 7150,
+  investedValue: 7150,
+  dailyVariation: 0,
+  dailyVariationPercent: 0,
+  variation: 0,
+  variationPercent: 0,
+};
 
 export const testRegisterStockRequest1: RegisterStockRequest = {
   stock: 'testStock1',
-  day: new Date('2022-02-18'),
+  date: new Date('2022-02-18'),
   quotas: 55,
   current_quota_value: 130,
   contribution: 7150,
   category: 'international',
 };
 
+export const testMappedStock1: Stock = {
+  id: uuidv4(),
+  stock: 'testStock1',
+  date: new Date('2022-02-18'),
+  contribution: 7150,
+  quotas: 55,
+  currentQuotaValue: 130,
+  category: 'international',
+  currentValue: 0,
+  meanQuotaValue: 0,
+  investedValue: 0,
+  dailyVariation: 0,
+  dailyVariationPercent: 0,
+  variation: 0,
+  variationPercent: 0,
+};
+export const testMappedStock2: Stock = {
+  id: uuidv4(),
+  stock: 'testStock1',
+  date: new Date('2022-02-19'),
+  quotas: 60,
+  currentQuotaValue: 135,
+  contribution: 675,
+  category: 'international',
+  currentValue: 0,
+  meanQuotaValue: 0,
+  investedValue: 0,
+  dailyVariation: 0,
+  dailyVariationPercent: 0,
+  variation: 0,
+  variationPercent: 0,
+};
+
 export const testStockRecord1: Stocks = {
-  id: 1,
+  id: uuidv4(),
   stock: 'TESTSTOCK1',
   category: 'international',
-  day: new Date('2022-02-18'),
+  date: new Date('2022-02-18'),
   quotas: 55,
   currentQuotaValue: 130,
   meanQuotaValue: 130,
@@ -33,7 +84,7 @@ export const testStockRecord1: Stocks = {
 export const testRegisterStockResponse1: StockClientEntity = {
   stock: 'TESTSTOCK1',
   category: 'international',
-  day: '2022-02-18',
+  date: '2022-02-18',
   quotas: 55,
   current_quota_value: 130,
   mean_quota_value: 130,
@@ -48,7 +99,7 @@ export const testRegisterStockResponse1: StockClientEntity = {
 
 export const testRegisterStockRequest2: RegisterStockRequest = {
   stock: 'testStock1',
-  day: new Date('2022-02-19'),
+  date: new Date('2022-02-19'),
   quotas: 60,
   current_quota_value: 135,
   contribution: 675,
@@ -56,10 +107,10 @@ export const testRegisterStockRequest2: RegisterStockRequest = {
 };
 
 export const testStockRecord2: Stocks = {
-  id: 2,
+  id: uuidv4(),
   stock: 'TESTSTOCK1',
   category: 'international',
-  day: new Date('2022-02-19'),
+  date: new Date('2022-02-19'),
   quotas: 60,
   currentQuotaValue: 135,
   meanQuotaValue: 130.416,
@@ -77,7 +128,7 @@ export const testStockRecord2: Stocks = {
 export const testRegisterStockResponse2: StockClientEntity = {
   stock: 'TESTSTOCK1',
   category: 'international',
-  day: '2022-02-19',
+  date: '2022-02-19',
   quotas: 60,
   current_quota_value: 135,
   mean_quota_value: 130.416,
@@ -99,7 +150,7 @@ export const testStockWithoutPreviousRecordRequest = {
 
 export const testStockWithoutPreviousRecord: Prisma.StocksCreateInput = {
   stock: 'STOCKWITHNORECORD',
-  day: '2022-04-01T00:00:00.000Z',
+  date: '2022-04-01T00:00:00.000Z',
   contribution: 555,
   quotas: 10,
   currentQuotaValue: 55.5,
@@ -118,7 +169,7 @@ export const testStockWithoutPreviousRecord: Prisma.StocksCreateInput = {
 export const testStockWithoutPreviousRecordResponse: StockClientEntity = {
   stock: 'STOCKWITHNORECORD',
   category: 'stocks',
-  day: '2022-04-01',
+  date: '2022-04-01',
   quotas: 10,
   current_quota_value: 55.5,
   mean_quota_value: 55.5,
@@ -140,7 +191,7 @@ export const testStockWithPreviousRecordRequest = {
 
 export const testStockWithPreviousRecord: Prisma.StocksCreateInput = {
   stock: 'STOCKWITHRECORD',
-  day: '2022-04-01T00:00:00.000Z',
+  date: '2022-04-01T00:00:00.000Z',
   contribution: 555,
   quotas: 10,
   currentQuotaValue: 55.5,
@@ -159,7 +210,7 @@ export const testStockWithPreviousRecord: Prisma.StocksCreateInput = {
 export const testStockWithPreviousRecordResponse: StockClientEntity = {
   stock: 'STOCKWITHRECORD',
   category: 'stocks',
-  day: '2022-04-02',
+  date: '2022-04-02',
   quotas: 15,
   current_quota_value: 50,
   mean_quota_value: 53.666666666666664,
