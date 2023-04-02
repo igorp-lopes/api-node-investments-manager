@@ -17,3 +17,7 @@ export const cleanupDatabase = async (prisma: PrismaService) => {
 
   await prisma.$disconnect();
 };
+
+export const generateFakerDate = (fakerDate: Date) => {
+  return new Date(fakerDate.toISOString().split('T')[0]);
+};
