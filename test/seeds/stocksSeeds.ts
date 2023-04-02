@@ -91,14 +91,24 @@ export const seedStockRecordsToBeDeleted: Prisma.StocksCreateInput[] = [
   },
 ];
 
-export const setupStocksDatabase = async (prisma: PrismaService) => {
-  await prisma.stocks.createMany({
-    data: [
+export async function setupStocksDatabase(prisma: PrismaService) {
+  await addManyStockRecords(
+    prisma,
+    [
       seedStockWithPreviousRecord,
       seedStockWithRepeatedRecord,
       seedStockRecordsToBeDeleted,
     ].flat(),
-  });
+  );
 
   await prisma.$disconnect();
-};
+}
+
+export async function addManyStockRecords(
+  prisma: PrismaService,
+  records: Prisma.StocksCreateInput[],
+) {
+  await prisma.stocks.createMany({
+    data: records,
+  });
+}

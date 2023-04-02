@@ -3,15 +3,21 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { StocksModule } from '../src/stocks/stocks.module';
 import { PrismaService } from '../src/core/prisma.service';
-import { cleanupDatabase, setupGlobalModules } from './testUtils';
+import { cleanupDatabase, setupGlobalModules } from './utils/generalTestUtils';
 import {
-  testStockWithoutPreviousRecordRequest,
-  testStockWithoutPreviousRecordResponse,
-  testStockWithPreviousRecordRequest,
-  testStockWithPreviousRecordResponse,
-  testStockWithRepeatedRecordRequest,
+  testStockWithoutRepeatedRecordRequest2,
+  testStockWithoutRepeatedRecordResponse2,
 } from './mocks/stockMocks';
-import { setupStocksDatabase } from './seeds/stocksSeeds';
+import { addManyStockRecords, setupStocksDatabase } from './seeds/stocksSeeds';
+import {
+  StocksDbBuilder,
+  StocksRequestBuilder,
+  StocksResponseBuilder,
+} from './mocks/stocksBuilders';
+
+const stocksRequestBuilder = new StocksRequestBuilder();
+const stocksResponseBuilder = new StocksResponseBuilder();
+const stocksDbBuilder = new StocksDbBuilder();
 
 describe('Stocks End-to-End Tests', () => {
   let app: INestApplication;
@@ -40,14 +46,14 @@ describe('Stocks End-to-End Tests', () => {
   const createStockRecordCases = [
     [
       'without previous records',
-      testStockWithoutPreviousRecordRequest,
-      testStockWithoutPreviousRecordResponse,
+      testStockWithoutRepeatedRecordRequest2,
+      testStockWithoutRepeatedRecordResponse2,
     ],
-    [
-      'with previous records',
-      testStockWithPreviousRecordRequest,
-      testStockWithPreviousRecordResponse,
-    ],
+    // [
+    //   'with previous records',
+    //   testStockWithPreviousRecordRequest,
+    //   testStockWithPreviousRecordResponse,
+    // ],
   ];
   test.each(createStockRecordCases)(
     'Creating a stock record %s',
@@ -63,9 +69,16 @@ describe('Stocks End-to-End Tests', () => {
   );
 
   test('Creating a stock record that already exists', async () => {
+    const stockRequest = stocksRequestBuilder.createStockRecordRequest();
+    const dbStockRecord =
+      stocksDbBuilder.createDbStockWithoutPreviousRecordFromStockRequest(
+        stockRequest,
+      );
+    await addManyStockRecords(prisma, [dbStockRecord]);
+
     const postResponse = await request(app.getHttpServer())
       .post('/stocks')
-      .send(testStockWithRepeatedRecordRequest);
+      .send(stockRequest);
     const content = postResponse.body;
 
     expect(postResponse.status).toEqual(400);

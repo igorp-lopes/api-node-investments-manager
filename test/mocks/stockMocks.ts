@@ -2,6 +2,10 @@ import { Stocks } from '@prisma/client';
 import { Stock, StockClientEntity } from '../../src/stocks/stocks.models';
 import { RegisterStockRequest } from '../../src/stocks/stocks.schemas';
 import { v4 as uuidv4 } from 'uuid';
+import { StocksRequestBuilder, StocksResponseBuilder } from './stocksBuilders';
+
+const stocksRequestBuilder = new StocksRequestBuilder();
+const stocksResponseBuilder = new StocksResponseBuilder();
 
 export const stockRepositoryResponse = {
   id: uuidv4(),
@@ -164,3 +168,11 @@ export const testStockWithRepeatedRecordRequest = {
   current_quota_value: 50,
   category: 'stocks',
 };
+
+export const testStockWithoutRepeatedRecordRequest2 =
+  stocksRequestBuilder.createStockRecordRequest();
+
+export const testStockWithoutRepeatedRecordResponse2 =
+  stocksResponseBuilder.createStockRecordWithoutPreviousRecordResponseFromRequest(
+    testStockWithoutRepeatedRecordRequest2,
+  );
