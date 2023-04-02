@@ -17,7 +17,7 @@ export class RegisterStockRequest {
 
   @IsNumber()
   @IsOptional()
-  readonly contribution: number;
+  readonly contribution?: number;
 
   @IsNumber()
   @IsPositive()
