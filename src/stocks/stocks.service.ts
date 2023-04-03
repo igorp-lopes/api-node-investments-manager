@@ -4,6 +4,7 @@ import { Stock } from './stocks.models';
 import { ErrorsService } from '../core/errors/errors.service';
 import { StocksErrors } from './stocks.errors';
 import { StocksMapper } from './stocks.mapper';
+import { calculateMeanQuotaValue } from '../helpers/financeHelpers';
 
 @Injectable()
 export class StocksService {
@@ -92,7 +93,7 @@ export class StocksService {
       ? quotaDiff * stockRecord.currentQuotaValue
       : 0;
 
-    const meanQuotaValue = StocksService.calculateMeanQuotaValue(
+    const meanQuotaValue = calculateMeanQuotaValue(
       previousRecord.meanQuotaValue,
       previousRecord.quotas,
       stockRecord.currentQuotaValue,
@@ -132,17 +133,5 @@ export class StocksService {
     );
 
     return !!record;
-  }
-
-  private static calculateMeanQuotaValue(
-    previousMeanQuota: number,
-    previousQuotas: number,
-    currentQuotaValue: number,
-    currentQuotas: number,
-  ) {
-    return (
-      (previousMeanQuota * previousQuotas + currentQuotaValue * currentQuotas) /
-      (previousQuotas + currentQuotas)
-    );
   }
 }
