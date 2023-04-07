@@ -2,11 +2,10 @@ export function calculateMeanQuotaValue(
   previousMeanQuotaValue: number,
   previousQuotas: number,
   currentQuotaValue: number,
-  currentQuotas: number,
+  newQuotas: number,
 ) {
   return (
-    (previousMeanQuotaValue * previousQuotas +
-      currentQuotaValue * currentQuotas) /
-    (previousQuotas + currentQuotas)
+    (previousMeanQuotaValue * previousQuotas + currentQuotaValue * newQuotas) /
+    (previousQuotas + newQuotas)
   );
 }
