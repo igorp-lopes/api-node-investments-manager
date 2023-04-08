@@ -3,7 +3,7 @@ import { PrismaService } from '../../src/core/prisma.service';
 
 export const seedStockWithPreviousRecord: Prisma.StocksCreateInput = {
   stock: 'STOCKWITHRECORD',
-  day: '2022-04-01T00:00:00.000Z',
+  date: '2022-04-01T00:00:00.000Z',
   contribution: 555,
   quotas: 10,
   currentQuotaValue: 55.5,
@@ -21,7 +21,7 @@ export const seedStockWithPreviousRecord: Prisma.StocksCreateInput = {
 
 export const seedStockWithRepeatedRecord: Prisma.StocksCreateInput = {
   stock: 'STOCKWITHREPEATEDRECORD',
-  day: '2022-04-01T00:00:00.000Z',
+  date: '2022-04-01T00:00:00.000Z',
   contribution: 555,
   quotas: 10,
   currentQuotaValue: 55.5,
@@ -40,7 +40,7 @@ export const seedStockWithRepeatedRecord: Prisma.StocksCreateInput = {
 export const seedStockRecordsToBeDeleted: Prisma.StocksCreateInput[] = [
   {
     stock: 'STOCKTOBEDELETED',
-    day: '2022-04-01T00:00:00.000Z',
+    date: '2022-04-01T00:00:00.000Z',
     contribution: 555,
     quotas: 10,
     currentQuotaValue: 55.5,
@@ -57,7 +57,7 @@ export const seedStockRecordsToBeDeleted: Prisma.StocksCreateInput[] = [
   },
   {
     stock: 'STOCKTOBEDELETED',
-    day: '2022-04-02T00:00:00.000Z',
+    date: '2022-04-02T00:00:00.000Z',
     contribution: 555,
     quotas: 10,
     currentQuotaValue: 55.5,
@@ -74,7 +74,7 @@ export const seedStockRecordsToBeDeleted: Prisma.StocksCreateInput[] = [
   },
   {
     stock: 'STOCKTOBEDELETED',
-    day: '2022-04-03T00:00:00.000Z',
+    date: '2022-04-03T00:00:00.000Z',
     contribution: 555,
     quotas: 10,
     currentQuotaValue: 55.5,
@@ -91,14 +91,24 @@ export const seedStockRecordsToBeDeleted: Prisma.StocksCreateInput[] = [
   },
 ];
 
-export const setupStocksDatabase = async (prisma: PrismaService) => {
-  await prisma.stocks.createMany({
-    data: [
+export async function setupStocksDatabase(prisma: PrismaService) {
+  await addManyStockRecords(
+    prisma,
+    [
       seedStockWithPreviousRecord,
       seedStockWithRepeatedRecord,
       seedStockRecordsToBeDeleted,
     ].flat(),
-  });
+  );
 
   await prisma.$disconnect();
-};
+}
+
+export async function addManyStockRecords(
+  prisma: PrismaService,
+  records: Prisma.StocksCreateInput[],
+) {
+  await prisma.stocks.createMany({
+    data: records,
+  });
+}

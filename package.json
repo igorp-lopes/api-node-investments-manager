@@ -21,7 +21,7 @@
     "test:cov": "dotenv -e .env.test -- jest --coverage --config ./jest-spec.json",
     "test:debug": "dotenv -e .env.test -- node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "pretest:e2e": "docker compose --env-file .env.test up -d && sleep 1 && dotenv -e .env.test yarn prisma migrate deploy",
-    "test:e2e": "dotenv -e .env.test -- jest --config ./jest-e2e.json",
+    "test:e2e": "yarn pretest:e2e && dotenv -e .env.test -- jest --config ./jest-e2e.json && yarn posttest:e2e",
     "posttest:e2e": "docker compose --env-file .env.test down -v"
   },
   "dependencies": {
@@ -38,9 +38,11 @@
     "pino-pretty": "^9.1.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.1.0",
-    "rxjs": "^7.8.0"
+    "rxjs": "^7.8.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@nestjs/cli": "^9.1.8",
     "@nestjs/schematics": "^9.0.4",
     "@nestjs/testing": "^9.2.1",

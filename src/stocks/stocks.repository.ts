@@ -1,21 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../core/prisma.service';
-import { Stocks, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import { StocksMapper } from './stocks.mapper';
 
 @Injectable()
 export class StocksRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private stocksMapper: StocksMapper,
+  ) {}
 
-  public async saveStock(data: Prisma.StocksCreateInput): Promise<Stocks> {
-    return this.prisma.stocks.create({ data });
+  public async saveStock(data: Prisma.StocksCreateInput) {
+    const savedStock = await this.prisma.stocks.create({ data });
+    return this.stocksMapper.fromPersistenceToEntity(savedStock);
   }
 
-  public async deleteStockRecordByDate(
-    stockName: string,
-    date: Date,
-  ): Promise<any> {
+  public async deleteStockRecordByDate(stockName: string, date: Date) {
     return this.prisma.stocks.deleteMany({
-      where: { stock: stockName, day: date },
+      where: { stock: stockName, date: date },
     });
   }
 
@@ -23,33 +25,29 @@ export class StocksRepository {
     stockName: string,
     startDate: Date,
     endDate: Date,
-  ): Promise<any> {
+  ) {
     return this.prisma.stocks.deleteMany({
-      where: { stock: stockName, day: { gte: startDate, lte: endDate } },
+      where: { stock: stockName, date: { gte: startDate, lte: endDate } },
     });
   }
 
-  public async getStockRecordByNameAndDate(
-    stockName: string,
-    date: Date,
-  ): Promise<any> {
-    return this.prisma.stocks.findFirst({
-      where: { stock: stockName, day: date },
+  public async getStockRecordByNameAndDate(stockName: string, date: Date) {
+    const stock = await this.prisma.stocks.findFirst({
+      where: { stock: stockName, date: date },
     });
+    return stock && this.stocksMapper.fromPersistenceToEntity(stock);
   }
 
-  public async getPreviousStockRecordsFromDate(
-    stockName: string,
-    date: Date,
-  ): Promise<any> {
-    return this.prisma.stocks.findFirst({
+  public async getPreviousStockRecordsFromDate(stockName: string, date: Date) {
+    const stock = await this.prisma.stocks.findFirst({
       where: {
         stock: stockName,
-        day: { lte: date },
+        date: { lte: date },
       },
       orderBy: {
-        day: 'desc',
+        date: 'desc',
       },
     });
+    return stock && this.stocksMapper.fromPersistenceToEntity(stock);
   }
 }

@@ -1,30 +1,32 @@
 import { Body, Controller, Delete, Param, Post, Query } from '@nestjs/common';
 import { StocksService } from './stocks.service';
 import {
-  DeleteStockRecordsQueryDto,
-  RegisterStockRequestDto,
-  StocksRegisterResponseDto,
-} from './stocks.models';
+  DeleteStockRecordsRequest,
+  RegisterStockRequest,
+} from './stocks.schemas';
+import { StocksMapper } from './stocks.mapper';
 
 @Controller('stocks')
 export class StocksController {
-  constructor(private stocksService: StocksService) {}
+  constructor(
+    private stocksService: StocksService,
+    private stocksMapper: StocksMapper,
+  ) {}
 
   @Post()
-  async addStockRecord(
-    @Body() stockData: RegisterStockRequestDto,
-  ): Promise<StocksRegisterResponseDto> {
-    return this.stocksService.addStockRecord(stockData);
+  async addStockRecord(@Body() stockData: RegisterStockRequest) {
+    const builtStock = this.stocksMapper.buildStock(stockData);
+    const createdStock = await this.stocksService.addStockRecord(builtStock);
+    return this.stocksMapper.fromEntityToClient(createdStock);
   }
 
-  @Delete('/:stock_name')
+  @Delete('/:stockName')
   async deleteStockRecord(
     @Param() params,
-    @Query() query: DeleteStockRecordsQueryDto,
+    @Query() query: DeleteStockRecordsRequest,
   ): Promise<any> {
-    const stockName = params.stock_name;
-    const startDate = query.start_date;
-    const endDate = query.end_date;
+    const stockName = params.stockName;
+    const { start_date: startDate, end_date: endDate } = query;
 
     return await this.stocksService.deleteStockRecords(
       stockName.toUpperCase(),

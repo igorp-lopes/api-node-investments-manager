@@ -1,7 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../core/prisma.service';
 import { StocksRepository } from './stocks.repository';
-import { testStockRecord1 } from '../../test/mocks/stockMocks';
+import {
+  stockRepositoryResponse,
+  testStockRecord1,
+} from '../../test/mocks/stockMocks';
+import { StocksMapper } from './stocks.mapper';
 
 describe('Stocks Repository Unit Tests', () => {
   let repository: StocksRepository;
@@ -9,7 +13,7 @@ describe('Stocks Repository Unit Tests', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [StocksRepository, PrismaService],
+      providers: [StocksRepository, PrismaService, StocksMapper],
     }).compile();
 
     repository = module.get<StocksRepository>(StocksRepository);
@@ -25,9 +29,10 @@ describe('Stocks Repository Unit Tests', () => {
       prisma.stocks.create = jest.fn().mockReturnValueOnce(testStockRecord1);
 
       const repResponse = repository.saveStock({
+        id: testStockRecord1.id,
         stock: 'testStock1',
         category: 'stocks',
-        day: '2022-02-18',
+        date: '2022-02-18',
         quotas: 55,
         currentQuotaValue: 130,
         meanQuotaValue: 130,
@@ -40,7 +45,10 @@ describe('Stocks Repository Unit Tests', () => {
         variationPercent: 0,
       });
 
-      await expect(repResponse).resolves.toEqual(testStockRecord1);
+      await expect(repResponse).resolves.toEqual({
+        ...stockRepositoryResponse,
+        id: testStockRecord1.id,
+      });
     });
   });
 
@@ -56,7 +64,10 @@ describe('Stocks Repository Unit Tests', () => {
         date,
       );
 
-      await expect(repResponse).resolves.toEqual(testStockRecord1);
+      await expect(repResponse).resolves.toEqual({
+        ...stockRepositoryResponse,
+        id: testStockRecord1.id,
+      });
     });
 
     it('should return no record if none exist', async () => {
@@ -86,7 +97,10 @@ describe('Stocks Repository Unit Tests', () => {
         date,
       );
 
-      await expect(repResponse).resolves.toEqual(testStockRecord1);
+      await expect(repResponse).resolves.toEqual({
+        ...stockRepositoryResponse,
+        id: testStockRecord1.id,
+      });
     });
 
     it('should return no record if none exist', async () => {
@@ -108,7 +122,7 @@ describe('Stocks Repository Unit Tests', () => {
     it('should inform that one record was deleted if it exists', async () => {
       prisma.stocks.deleteMany = jest.fn().mockReturnValueOnce({ count: 1 });
 
-      const date = new Date(testStockRecord1.day);
+      const date = new Date(testStockRecord1.date);
       const stock = testStockRecord1.stock;
 
       const repResponse = repository.deleteStockRecordByDate(stock, date);
@@ -118,7 +132,7 @@ describe('Stocks Repository Unit Tests', () => {
     it('should inform that no record was deleted if it does not exists', async () => {
       prisma.stocks.deleteMany = jest.fn().mockReturnValueOnce({ count: 0 });
 
-      const date = new Date(testStockRecord1.day);
+      const date = new Date(testStockRecord1.date);
       const stock = 'nothing';
 
       const repResponse = repository.deleteStockRecordByDate(stock, date);
