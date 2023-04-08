@@ -1,11 +1,7 @@
 import { Stocks } from '@prisma/client';
-import { Stock, StockClientEntity } from '../../src/stocks/stocks.models';
+import { Stock } from '../../src/stocks/stocks.models';
 import { RegisterStockRequest } from '../../src/stocks/stocks.schemas';
 import { v4 as uuidv4 } from 'uuid';
-import { StocksRequestBuilder, StocksResponseBuilder } from './stocksBuilders';
-
-const stocksRequestBuilder = new StocksRequestBuilder();
-const stocksResponseBuilder = new StocksResponseBuilder();
 
 export const stockRepositoryResponse = {
   id: uuidv4(),
@@ -112,67 +108,3 @@ export const testStockRecord2: Stocks = {
   createdAt: new Date('2022-03-19T00:47:19.292Z'),
   updatedAt: new Date('2022-03-19T00:47:19.292Z'),
 };
-
-export const testStockWithoutPreviousRecordRequest = {
-  stock: 'stockWithNoRecord',
-  date: '2022-04-01',
-  quotas: 10,
-  current_quota_value: 55.5,
-  category: 'stocks',
-};
-
-export const testStockWithoutPreviousRecordResponse: StockClientEntity = {
-  stock: 'STOCKWITHNORECORD',
-  category: 'stocks',
-  date: '2022-04-01',
-  quotas: 10,
-  current_quota_value: 55.5,
-  mean_quota_value: 55.5,
-  contribution: 555,
-  current_value: 555,
-  invested_value: 555,
-  daily_variation: 0,
-  daily_variation_percent: 0,
-  variation: 0,
-  variation_percent: 0,
-};
-
-export const testStockWithPreviousRecordRequest = {
-  stock: 'stockWithRecord',
-  date: '2022-04-02',
-  quotas: 15,
-  current_quota_value: 50,
-  category: 'stocks',
-};
-
-export const testStockWithPreviousRecordResponse: StockClientEntity = {
-  stock: 'STOCKWITHRECORD',
-  category: 'stocks',
-  date: '2022-04-02',
-  quotas: 15,
-  current_quota_value: 50,
-  mean_quota_value: 53.66666666666666,
-  contribution: 250,
-  current_value: 750,
-  invested_value: 805,
-  daily_variation: -55,
-  daily_variation_percent: -0.0990990990990991,
-  variation: -55,
-  variation_percent: -0.06832298136645963,
-};
-
-export const testStockWithRepeatedRecordRequest = {
-  stock: 'stockWithRecord',
-  date: '2022-04-02',
-  quotas: 15,
-  current_quota_value: 50,
-  category: 'stocks',
-};
-
-export const testStockWithoutRepeatedRecordRequest2 =
-  stocksRequestBuilder.createStockRecordRequest();
-
-export const testStockWithoutRepeatedRecordResponse2 =
-  stocksResponseBuilder.createStockRecordWithoutPreviousRecordResponseFromRequest(
-    testStockWithoutRepeatedRecordRequest2,
-  );
