@@ -21,3 +21,9 @@ export const cleanupDatabase = async (prisma: PrismaService) => {
 export const generateFakerDate = (fakerDate: Date) => {
   return new Date(fakerDate.toISOString().split('T')[0]);
 };
+
+export const addDaysToDate = (date: Date, days = 1) => {
+  const finalDate = new Date(date.valueOf());
+  finalDate.setDate(date.getDate() + days);
+  return finalDate;
+};
