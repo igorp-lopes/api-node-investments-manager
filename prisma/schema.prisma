@@ -11,22 +11,19 @@ datasource db {
 }
 
 model Stocks {
-  id                    String   @id @default(uuid())
-  stock                 String
-  date                  DateTime @db.Date
-  investedValue         Float
-  currentValue          Float
-  contribution          Float
-  quotas                Int
-  currentQuotaValue     Float
-  meanQuotaValue        Float
-  dailyVariation        Float
-  dailyVariationPercent Float
-  variation             Float
-  variationPercent      Float
-  category              String
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @default(now())
+  id                String   @id @default(uuid())
+  stock             String
+  category          String
+  date              DateTime @db.Date
+  quotas            Int
+  investedValue     Float
+  currentValue      Float
+  currentQuotaValue Float
+  meanQuotaValue    Float
+  variation         Float
+  variationPercent  Float
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model Reits {
