@@ -61,23 +61,22 @@ export class StocksService {
         stockRecord.date,
       );
 
-    if (!mostRecentPreviousRecord) {
-      return this.determineStockRecordDataWithNoPreviousRecords(stockRecord);
+    if (mostRecentPreviousRecord) {
+      return this.determineStockRecordDataWithPreviousRecords(
+        stockRecord,
+        mostRecentPreviousRecord,
+      );
     }
 
-    return this.determineStockRecordDataWithPreviousRecords(
-      stockRecord,
-      mostRecentPreviousRecord,
-    );
+    return this.determineStockRecordDataWithNoPreviousRecords(stockRecord);
   }
 
-  private determineStockRecordDataWithNoPreviousRecords(stockRecord: Stock) {
-    const currentValue = stockRecord.quotas * stockRecord.currentQuotaValue;
+  private determineStockRecordDataWithNoPreviousRecords(
+    stockRecord: Stock,
+  ): Stock {
     return {
       ...stockRecord,
-      currentValue,
-      investedValue: currentValue,
-      contribution: currentValue,
+      investedValue: stockRecord.currentValue,
       meanQuotaValue: stockRecord.currentQuotaValue,
     };
   }
@@ -86,12 +85,7 @@ export class StocksService {
     stockRecord: Stock,
     previousRecord: Stock,
   ) {
-    const currentValue = stockRecord.quotas * stockRecord.currentQuotaValue;
-
     const quotaDiff = stockRecord.quotas - previousRecord.quotas;
-    const contribution = quotaDiff
-      ? quotaDiff * stockRecord.currentQuotaValue
-      : 0;
 
     const meanQuotaValue = calculateMeanQuotaValue(
       previousRecord.meanQuotaValue,
@@ -100,25 +94,16 @@ export class StocksService {
       quotaDiff,
     );
 
-    const dailyVariation =
-      currentValue - previousRecord.currentValue - contribution;
-
-    const dailyVariationPercent = dailyVariation / previousRecord.currentValue;
-
     const investedValue = stockRecord.quotas * meanQuotaValue;
 
-    const variation = currentValue - investedValue;
+    const variation = stockRecord.currentValue - investedValue;
     const variationPercent = variation / investedValue;
 
     return {
       ...stockRecord,
-      contribution,
       meanQuotaValue,
-      dailyVariation,
-      dailyVariationPercent,
       variation,
       variationPercent,
-      currentValue,
       investedValue,
     };
   }

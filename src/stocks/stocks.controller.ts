@@ -17,6 +17,7 @@ export class StocksController {
   async addStockRecord(@Body() stockData: RegisterStockRequest) {
     const builtStock = this.stocksMapper.buildStock(stockData);
     const createdStock = await this.stocksService.addStockRecord(builtStock);
+
     return this.stocksMapper.fromEntityToClient(createdStock);
   }
 
